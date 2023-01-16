@@ -1,4 +1,4 @@
-package stay.journeyPoint;
+package businessLogic.journeyPoint;
 
 public class TouristicSite extends JourneyPoint {
 	private double attractionTime;

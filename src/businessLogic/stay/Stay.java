@@ -1,8 +1,8 @@
-package stay;
+package businessLogic.stay;
 
 import java.util.List;
 
-import stay.journeyPoint.Hotel;
+import businessLogic.journeyPoint.Hotel;
 
 public class Stay {
 	private Hotel beginPoint;
@@ -18,6 +18,14 @@ public class Stay {
 	{
 		//TODO implementation
 		return 0;
+	}
+
+	public Hotel getBeginPoint() {
+		return beginPoint;
+	}
+
+	public List<StayActivity> getActivities() {
+		return activities;
 	}
 	
 	

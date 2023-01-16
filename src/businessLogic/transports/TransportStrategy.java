@@ -1,4 +1,4 @@
-package stay.transport;
+package businessLogic.transports;
 
 public abstract class TransportStrategy {
 	private double speed;

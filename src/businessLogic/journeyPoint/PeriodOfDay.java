@@ -1,4 +1,4 @@
-package stay.journeyPoint;
+package businessLogic.journeyPoint;
 
 public enum PeriodOfDay {
 	Morning,

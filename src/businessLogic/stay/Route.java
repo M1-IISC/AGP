@@ -1,7 +1,7 @@
-package stay;
+package businessLogic.stay;
 
-import stay.journeyPoint.JourneyPoint;
-import stay.transport.TransportStrategy;
+import businessLogic.journeyPoint.JourneyPoint;
+import businessLogic.transports.TransportStrategy;
 
 public class Route {
 	private final JourneyPoint destination;

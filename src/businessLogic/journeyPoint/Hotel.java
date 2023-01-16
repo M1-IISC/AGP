@@ -1,4 +1,4 @@
-package stay.journeyPoint;
+package businessLogic.journeyPoint;
 
 public class Hotel extends JourneyPoint {
 	private double nightCost;

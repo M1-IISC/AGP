@@ -1,4 +1,4 @@
-package stay.transport;
+package businessLogic.transports;
 
 public class BoatStrategy extends TransportStrategy {
 

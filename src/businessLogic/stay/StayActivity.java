@@ -1,6 +1,6 @@
-package stay;
+package businessLogic.stay;
 
-import stay.journeyPoint.PeriodOfDay;
+import businessLogic.journeyPoint.PeriodOfDay;
 
 public abstract class StayActivity {
 	private PeriodOfDay periodOfActivity;

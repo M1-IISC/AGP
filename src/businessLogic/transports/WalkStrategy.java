@@ -1,6 +1,6 @@
-package stay.transport;
+package businessLogic.transports;
 
-public class BusStrategy extends TransportStrategy {
+public class WalkStrategy extends TransportStrategy {
 	private double confortOverDistance;
 
 	@Override
@@ -24,4 +24,6 @@ public class BusStrategy extends TransportStrategy {
 	public double getConfortOverDistance() {
 		return confortOverDistance;
 	}
+	
+	
 }

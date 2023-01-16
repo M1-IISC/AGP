@@ -1,4 +1,4 @@
-package stay;
+package businessLogic.stay;
 
 public class Move extends StayActivity {
 	private Route route;

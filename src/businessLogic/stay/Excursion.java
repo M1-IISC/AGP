@@ -1,10 +1,9 @@
-package stay;
+package businessLogic.stay;
 
-import stay.journeyPoint.Hotel;
+import java.util.List;
 
-public class ChillTime extends StayActivity {
-	
-	private Hotel hotel;
+public class Excursion extends StayActivity {
+	private List<Route> routes;
 
 	@Override
 	public double calculateConfort() {
@@ -17,9 +16,9 @@ public class ChillTime extends StayActivity {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	public Hotel getHotel() {
-		return hotel;
+
+	public List<Route> getRoutes() {
+		return routes;
 	}
 
 }
