@@ -1,5 +1,5 @@
 package businessLogic.itinaryGraph;
 
 public interface ItinaryGraphBuilder {
-	public abstract ItinaryGraph build();
+	public abstract ItinaryGraph build(String keywords);
 }

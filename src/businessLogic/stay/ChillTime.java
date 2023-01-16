@@ -1,21 +1,25 @@
 package businessLogic.stay;
 
 import businessLogic.journeyPoint.Hotel;
+import businessLogic.journeyPoint.PeriodOfDay;
 
 public class ChillTime extends StayActivity {
 	
 	private Hotel hotel;
+	
+	public ChillTime(PeriodOfDay periodOfActivity, Hotel hotel) {
+		super(periodOfActivity);
+		this.hotel = hotel;
+	}
 
 	@Override
 	public double calculateConfort() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double calculateCost() {
-		// TODO Auto-generated method stub
-		return 0;
+		return hotel.calculateCost(getPeriodOfActivity());
 	}
 	
 	public Hotel getHotel() {

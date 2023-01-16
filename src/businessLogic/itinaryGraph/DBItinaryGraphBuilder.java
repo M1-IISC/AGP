@@ -1,9 +1,58 @@
 package businessLogic.itinaryGraph;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import businessLogic.journeyPoint.JourneyPoint;
+import businessLogic.journeyPoint.JourneyPointFactory;
+import businessLogic.persistance.DBPlaceObject;
+import businessLogic.persistance.DBPlacesTransportObject;
+import businessLogic.persistance.DataAccesObject;
+
 public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
+	
+	private final DataAccesObject DataAccesor;
+	private final JourneyPointFactory hotelFactory;
+	private final JourneyPointFactory touristicSiteFactory;
+	
+	public DBItinaryGraphBuilder(DataAccesObject dataAccesor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
+		super();
+		DataAccesor = dataAccesor;
+		this.hotelFactory = hotelFactory;
+		this.touristicSiteFactory = touristicSiteFactory;
+	}
+
 	@Override
-	public ItinaryGraph build() {
-		// TODO Auto-generated method stub
-		return null;
+	public ItinaryGraph build(String keywords) {
+		List<DBPlacesTransportObject> places = DataAccesor.fetchSitesRelationsByKeywords(keywords);
+		if (places == null || places.size()==0) 
+			return null;
+		Map<String, Node> nodes = new HashMap<String, Node>();
+		for (DBPlacesTransportObject placeRelation : places) {
+			DBPlaceObject placeA = placeRelation.getSiteA();
+			addUniqueNodeFromPlace(nodes, placeA);
+			
+			DBPlaceObject placeB = placeRelation.getSiteB();
+			addUniqueNodeFromPlace(nodes, placeB);
+			
+			// TODO getTransportStrategyOfType without any duplicates
+			Edge edge = new Edge(null, placeRelation.getDistance(), nodes.get(placeB.getName()));
+			
+			nodes.get(placeA.getName()).getEdges().add(edge);
+		}
+		return new ItinaryGraph(nodes.get(places.get(0).getSiteA().getName()));
+	}
+	
+	private void addUniqueNodeFromPlace(Map<String, Node> nodes, DBPlaceObject place)
+	{
+		if(!nodes.containsKey(place.getName()))
+		{
+			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost());
+			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost());
+			
+			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>()) : new Node(asHotel, new ArrayList<Edge>()));
+		}
 	}
 }
