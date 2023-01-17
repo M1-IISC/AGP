@@ -27,12 +27,13 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	private static final int MAX_ACTIVITIES = 5;  
 	private static final double MAX_TIME = 5;  
 	
-	ItineraryGraph itineraryGraph;
-	double budget;
-	PeriodOfDay periodOfDay;
+	private ItineraryGraph itineraryGraph;
+	private double budget;
+	private PeriodOfDay periodOfDay;
 	
-	public StayActivityBuilder(ItineraryGraph itineraryGraph) {
+	public StayActivityBuilder(ItineraryGraph itineraryGraph, double budget) {
 		this.itineraryGraph = itineraryGraph;
+		this.budget = budget;
 	}
 
 	@Override

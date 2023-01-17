@@ -25,7 +25,7 @@ public class StayBuilder implements IStayBuilder {
 		stay.setBeginPoint(hotel);
 		
 		// Plan the excursions according to the excursion profile
-		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph);
+		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph, maximumPrice);
 		int day;
 		boolean dayIsOff = false;
 		for (day = 1; day <= stayDuration; day++) {
