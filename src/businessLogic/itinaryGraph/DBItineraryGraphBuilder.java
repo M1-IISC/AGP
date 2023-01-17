@@ -11,13 +11,13 @@ import businessLogic.persistance.PlaceObject;
 import businessLogic.persistance.PlacesTransportObject;
 import businessLogic.persistance.DataAccesObject;
 
-public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
+public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	
 	private final DataAccesObject DataAccesor;
 	private final JourneyPointFactory hotelFactory;
 	private final JourneyPointFactory touristicSiteFactory;
 	
-	public DBItinaryGraphBuilder(DataAccesObject dataAccesor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
+	public DBItineraryGraphBuilder(DataAccesObject dataAccesor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
 		super();
 		DataAccesor = dataAccesor;
 		this.hotelFactory = hotelFactory;
@@ -25,7 +25,7 @@ public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
 	}
 
 	@Override
-	public ItinaryGraph build(String keywords) {
+	public ItineraryGraph build(String keywords) {
 		List<PlacesTransportObject> places = DataAccesor.fetchSitesRelationsByKeywords(keywords);
 		if (places == null || places.size()==0) 
 			return null;
@@ -42,7 +42,7 @@ public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
 			
 			nodes.get(placeA.getName()).getEdges().add(edge);
 		}
-		return new ItinaryGraph(nodes.get(places.get(0).getSiteA().getName()));
+		return new ItineraryGraph(nodes.get(places.get(0).getSiteA().getName()));
 	}
 	
 	private void addUniqueNodeFromPlace(Map<String, Node> nodes, PlaceObject place)

@@ -1,7 +1,7 @@
 package businessLogic.stay;
 
 import businessLogic.StayProfile;
-import businessLogic.itinaryGraph.ItinaryGraph;
+import businessLogic.itinaryGraph.ItineraryGraph;
 
 public interface StayBuilder {
 	
@@ -15,5 +15,5 @@ public interface StayBuilder {
 	 * @param keywords words to describe what to look for in the description of activities
 	 * @return The recommended stay
 	 */
-	public abstract Stay build(ItinaryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords);
+	public abstract Stay build(ItineraryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords);
 }

@@ -3,14 +3,14 @@ package businessLogic.stay;
 import java.util.Random;
 
 import businessLogic.StayProfile;
-import businessLogic.itinaryGraph.ItinaryGraph;
+import businessLogic.itinaryGraph.ItineraryGraph;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.PeriodOfDay;
 
 public class StayGenerator implements StayBuilder {
 
 	@Override
-	public Stay build(ItinaryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords) {	
+	public Stay build(ItineraryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords) {	
 		// Tools
 		Random rand = new Random();
 		

@@ -1,9 +1,9 @@
 package businessLogic.itinaryGraph;
 
-public class ItinaryGraph {
+public class ItineraryGraph {
 	private Node head;
 
-	public ItinaryGraph(Node head) {
+	public ItineraryGraph(Node head) {
 		super();
 		this.head = head;
 	}

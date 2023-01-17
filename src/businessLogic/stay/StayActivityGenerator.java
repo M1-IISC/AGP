@@ -8,7 +8,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import businessLogic.itinaryGraph.Edge;
-import businessLogic.itinaryGraph.ItinaryGraph;
+import businessLogic.itinaryGraph.ItineraryGraph;
 import businessLogic.itinaryGraph.Node;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.JourneyPoint;
@@ -20,11 +20,11 @@ public class StayActivityGenerator implements StayActivityBuilder {
 	private static final int MAX_ACTIVITIES = 5;  
 	private static final double MAX_TIME = 5;  
 	
-	ItinaryGraph itineraryGraph;
+	ItineraryGraph itineraryGraph;
 	double budget;
 	PeriodOfDay periodOfDay;
 	
-	public StayActivityGenerator(ItinaryGraph itineraryGraph) {
+	public StayActivityGenerator(ItineraryGraph itineraryGraph) {
 		this.itineraryGraph = itineraryGraph;
 	}
 
