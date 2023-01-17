@@ -2,13 +2,13 @@ package businessLogic.persistance;
 
 import businessLogic.transports.TransportType;
 
-public class DBPlacesTransportObject {
-	private DBPlaceObject siteA;
-	private DBPlaceObject siteB;
+public class PlacesTransportObject {
+	private PlaceObject siteA;
+	private PlaceObject siteB;
 	private TransportType type;
 	private double distance;
 	
-	public DBPlacesTransportObject(DBPlaceObject siteA, DBPlaceObject siteB, TransportType type, double distance) {
+	public PlacesTransportObject(PlaceObject siteA, PlaceObject siteB, TransportType type, double distance) {
 		super();
 		this.siteA = siteA;
 		this.siteB = siteB;
@@ -16,19 +16,19 @@ public class DBPlacesTransportObject {
 		this.distance = distance;
 	}
 
-	public DBPlaceObject getSiteA() {
+	public PlaceObject getSiteA() {
 		return siteA;
 	}
 
-	public void setSiteA(DBPlaceObject siteA) {
+	public void setSiteA(PlaceObject siteA) {
 		this.siteA = siteA;
 	}
 
-	public DBPlaceObject getSiteB() {
+	public PlaceObject getSiteB() {
 		return siteB;
 	}
 
-	public void setSiteB(DBPlaceObject siteB) {
+	public void setSiteB(PlaceObject siteB) {
 		this.siteB = siteB;
 	}
 

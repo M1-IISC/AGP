@@ -7,8 +7,8 @@ import java.util.Map;
 
 import businessLogic.journeyPoint.JourneyPoint;
 import businessLogic.journeyPoint.JourneyPointFactory;
-import businessLogic.persistance.DBPlaceObject;
-import businessLogic.persistance.DBPlacesTransportObject;
+import businessLogic.persistance.PlaceObject;
+import businessLogic.persistance.PlacesTransportObject;
 import businessLogic.persistance.DataAccesObject;
 
 public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
@@ -26,15 +26,15 @@ public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
 
 	@Override
 	public ItinaryGraph build(String keywords) {
-		List<DBPlacesTransportObject> places = DataAccesor.fetchSitesRelationsByKeywords(keywords);
+		List<PlacesTransportObject> places = DataAccesor.fetchSitesRelationsByKeywords(keywords);
 		if (places == null || places.size()==0) 
 			return null;
 		Map<String, Node> nodes = new HashMap<String, Node>();
-		for (DBPlacesTransportObject placeRelation : places) {
-			DBPlaceObject placeA = placeRelation.getSiteA();
+		for (PlacesTransportObject placeRelation : places) {
+			PlaceObject placeA = placeRelation.getSiteA();
 			addUniqueNodeFromPlace(nodes, placeA);
 			
-			DBPlaceObject placeB = placeRelation.getSiteB();
+			PlaceObject placeB = placeRelation.getSiteB();
 			addUniqueNodeFromPlace(nodes, placeB);
 			
 			// TODO getTransportStrategyOfType without any duplicates
@@ -45,7 +45,7 @@ public class DBItinaryGraphBuilder implements ItinaryGraphBuilder {
 		return new ItinaryGraph(nodes.get(places.get(0).getSiteA().getName()));
 	}
 	
-	private void addUniqueNodeFromPlace(Map<String, Node> nodes, DBPlaceObject place)
+	private void addUniqueNodeFromPlace(Map<String, Node> nodes, PlaceObject place)
 	{
 		if(!nodes.containsKey(place.getName()))
 		{

@@ -1,6 +1,6 @@
 package businessLogic.persistance;
 
-public class DBPlaceObject {
+public class PlaceObject {
 	private String name;
 	private String description;
 	private double confort;
@@ -9,7 +9,7 @@ public class DBPlaceObject {
 	private double lunchCost;
 	private double nightcost;
 	
-	public DBPlaceObject(String name, String description, double confort, double attractionTime, double cost,
+	public PlaceObject(String name, String description, double confort, double attractionTime, double cost,
 			double lunchCost, double nightcost) {
 		super();
 		this.name = name;
