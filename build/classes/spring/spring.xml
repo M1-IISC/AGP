@@ -30,7 +30,7 @@
 			<value>5</value>
 		</property>
 	</bean>
-	<bean id="BusStrategy" class="businessLogic.transports.BoatStrategy" parent="TransportStrategy">
+	<bean id="BoatStrategy" class="businessLogic.transports.BoatStrategy" parent="TransportStrategy">
 		<property name="speed">
 			<value>60</value>
 		</property>
@@ -41,6 +41,21 @@
 			<value>50</value>
 		</property>
 	</bean>
+	
+	
+	<bean id="IBDePersistence" class="persistence.IBDePersistence" abstract="true"/>
+	<bean id="BDePersistence" class="persistence.BDePersistence" parent="IBDePersistence"/>
 
-	<bean id="DataAccesObject" class="businessLogic.persistance.DataAccesObject" abstract="true"/>
+	<bean id="DataAccesObject" class="businessLogic.dataAccess.DataAccesObject" abstract="true"/>
+	<bean id="DBDataAccesObject" class="businessLogic.dataAccess.DBDataAccesObject" parent="DataAccesObject">
+		<property name="persistanceLayerInterface" ref="BDePersistence"/>
+	</bean>
+	
+	
+	
+	
+	<bean id="JourneyPointFactory" class="businessLogic.journeyPoint.JourneyPointFactory" abstract="true"/>
+	<bean id="HotelFactory" class="businessLogic.journeyPoint.HotelFactory" parent="JourneyPointFactory"/>
+	<bean id="TouristicSiteFactory" class="businessLogic.journeyPoint.TouristicSiteFactory" parent="JourneyPointFactory"/>
+	
 </beans>

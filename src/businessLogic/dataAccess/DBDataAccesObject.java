@@ -12,6 +12,14 @@ import persistence.IBDePersistence;
 public class DBDataAccesObject implements DataAccesObject {
 	private IBDePersistence persistanceLayerInterface;
 	
+	public IBDePersistence getPersistanceLayerInterface() {
+		return persistanceLayerInterface;
+	}
+
+	public void setPersistanceLayerInterface(IBDePersistence persistanceLayerInterface) {
+		this.persistanceLayerInterface = persistanceLayerInterface;
+	}
+
 	@Override
 	public List<PlaceObject> fetchAllHotels() {
 		// TODO Auto-generated method stub
@@ -41,12 +49,12 @@ public class DBDataAccesObject implements DataAccesObject {
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
 					null, //(String)line.get("descroption") //TODO
-					((Double)line.get("confort")).doubleValue(),
-					((Double)line.get("duration")).doubleValue(),
-					((Double)line.get("price")).doubleValue(),
-					((Double)line.get("night_price")).doubleValue(),
-					((Double)line.get("lunch_price")).doubleValue(),
-					(CategoryOfSite)line.get("category"),
+					getValue((Float)line.get("comfort")),
+					getValue((Float)line.get("duration")),
+					getValue((Float)line.get("price")),
+					getValue((Float)line.get("night_price")),
+					getValue((Float)line.get("lunch_price")),
+					getSiteValue(line.get("category")),
 					1 //TODO score
 					));
 		}
@@ -73,12 +81,12 @@ public class DBDataAccesObject implements DataAccesObject {
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
 					null, //(String)line.get("descroption") //TODO
-					((Double)line.get("confort")).doubleValue(),
-					((Double)line.get("duration")).doubleValue(),
-					((Double)line.get("price")).doubleValue(),
-					((Double)line.get("night_price")).doubleValue(),
-					((Double)line.get("lunch_price")).doubleValue(),
-					(CategoryOfSite)line.get("category"),
+					getValue((Float)line.get("comfort")),
+					getValue((Float)line.get("duration")),
+					getValue((Float)line.get("price")),
+					getValue((Float)line.get("night_price")),
+					getValue((Float)line.get("lunch_price")),
+					getSiteValue(line.get("category")),
 					1 //TODO score
 					));
 		}
@@ -94,10 +102,10 @@ public class DBDataAccesObject implements DataAccesObject {
 		String querry = String.format("Select * \r\n"
 				+ "FROM\r\n"
 				+ "transport LEFT OUTER JOIN\r\n"
-				+ "(SELECT p.name as startName, p.comfort as startConfort, h.night_price as startNightPrice, h.lunch_price as startLunchPrice, s.price as startCost, s.duration  as startDuration, s.category as startCat\r\n"
+				+ "(SELECT p.name as startName, p.comfort as startComfort, h.night_price as startNightPrice, h.lunch_price as startLunchPrice, s.price as startCost, s.duration  as startDuration, s.category as startCat\r\n"
 				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name) AS T1 ON transport.start_place = startName\r\n"
 				+ "left outer JOIN\r\n"
-				+ "(SELECT p.name as endName, p.comfort as endConfort, h.night_price as endNightPrice, h.lunch_price as endLunchPrice, s.price as endCost, s.duration  as endDuration, s.category as endCat\r\n"
+				+ "(SELECT p.name as endName, p.comfort as endComfort, h.night_price as endNightPrice, h.lunch_price as endLunchPrice, s.price as endCost, s.duration  as endDuration, s.category as endCat\r\n"
 				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name) AS T2 ON transport.end_place = endName");
 		
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
@@ -111,32 +119,47 @@ public class DBDataAccesObject implements DataAccesObject {
 					new PlaceObject(
 							(String)line.get("startName"),
 							null, //(String)line.get("descroption") //TODO
-							((Double)line.get("startConfort")).doubleValue(),
-							((Double)line.get("startDuration")).doubleValue(),
-							((Double)line.get("startCost")).doubleValue(),
-							((Double)line.get("startNightPrice")).doubleValue(),
-							((Double)line.get("startLunchPrice")).doubleValue(),
-							(CategoryOfSite)line.get("startCat"),
+							getValue((Float)line.get("startComfort")),
+							getValue((Float)line.get("startDuration")),
+							getValue((Float)line.get("startCost")),
+							getValue((Float)line.get("startNightPrice")),
+							getValue((Float)line.get("startLunchPrice")),
+							getSiteValue(line.get("startCat")),
 							1 //TODO score
 							),
 					//place destination
 					new PlaceObject(
 							(String)line.get("endName"),
 							null, //(String)line.get("descroption") //TODO
-							((Double)line.get("endConfort")).doubleValue(),
-							((Double)line.get("endDuration")).doubleValue(),
-							((Double)line.get("endCost")).doubleValue(),
-							((Double)line.get("endNightPrice")).doubleValue(),
-							((Double)line.get("endLunchPrice")).doubleValue(),
-							(CategoryOfSite)line.get("endCat"),
+							getValue((Float)line.get("endComfort")),
+							getValue((Float)line.get("endDuration")),
+							getValue((Float)line.get("endCost")),
+							getValue((Float)line.get("endNightPrice")),
+							getValue((Float)line.get("endLunchPrice")),
+							getSiteValue(line.get("endCat")),
 							1 //TODO score
 							),
-						(TransportType)line.get("type"),
-						((Double)line.get("distance")).doubleValue()
+						getValue(line.get("type")),
+						getValue((Float)line.get("distance"))
 						)
 					);
 		}
 		
 		return placesTransportObjectList;
+	}
+	
+	private double getValue(Float f)
+	{
+		return f != null ? f.doubleValue() : 0;
+	}
+	
+	private CategoryOfSite  getSiteValue(Object o)
+	{
+		return o !=null ? CategoryOfSite.valueOf((String)o) : CategoryOfSite.HISTORIC;
+	}
+	
+	private TransportType  getValue(Object o)
+	{
+		return TransportType.valueOf((String)o);
 	}
 }
