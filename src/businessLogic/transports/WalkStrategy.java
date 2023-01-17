@@ -22,4 +22,9 @@ public class WalkStrategy extends TransportStrategy {
 	public double calculatePrice(double distance) {
 		return 0;
 	}
+
+	@Override
+	public TransportType getType() {
+		return TransportType.Walk;
+	}
 }

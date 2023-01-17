@@ -34,4 +34,9 @@ public class Excursion extends StayActivity {
 		return routes;
 	}
 
+	@Override
+	public StayActivityType getType() {
+		return StayActivityType.Excursion;
+	}
+
 }

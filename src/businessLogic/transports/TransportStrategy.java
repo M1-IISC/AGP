@@ -15,6 +15,8 @@ public abstract class TransportStrategy {
 	public abstract double calculateTime(double distance);
 	
 	public abstract double calculatePrice(double distance);
+	
+	public abstract TransportType getType();
 
 	public double getSpeed() {
 		return speed;

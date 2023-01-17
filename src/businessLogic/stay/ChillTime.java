@@ -26,4 +26,9 @@ public class ChillTime extends StayActivity {
 		return hotel;
 	}
 
+	@Override
+	public StayActivityType getType() {
+		return StayActivityType.ChillTime;
+	}
+
 }

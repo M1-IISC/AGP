@@ -24,4 +24,9 @@ public class BusStrategy extends TransportStrategy {
 	public double calculatePrice(double distance) {
 		return cost;
 	}
+
+	@Override
+	public TransportType getType() {
+		return TransportType.Bus;
+	}
 }

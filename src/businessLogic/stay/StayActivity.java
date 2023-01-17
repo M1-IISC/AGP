@@ -13,6 +13,8 @@ public abstract class StayActivity {
 	public abstract double calculateConfort();
 	
 	public abstract double calculateCost();
+	
+	public abstract StayActivityType getType();
 
 	public PeriodOfDay getPeriodOfActivity() {
 		return periodOfActivity;

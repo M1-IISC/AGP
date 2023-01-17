@@ -23,4 +23,9 @@ public class BoatStrategy extends TransportStrategy {
 		return cost;
 	}
 
+	@Override
+	public TransportType getType() {
+		return TransportType.Boat;
+	}
+
 }

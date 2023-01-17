@@ -24,4 +24,9 @@ public class Move extends StayActivity {
 		return route;
 	}
 
+	@Override
+	public StayActivityType getType() {
+		return StayActivityType.Move;
+	}
+
 }
