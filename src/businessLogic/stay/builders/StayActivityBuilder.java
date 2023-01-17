@@ -1,4 +1,4 @@
-package businessLogic.stay;
+package businessLogic.stay.builders;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,9 +14,15 @@ import businessLogic.itinaryGraph.Node;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.JourneyPoint;
 import businessLogic.journeyPoint.PeriodOfDay;
+import businessLogic.stay.ChillTime;
+import businessLogic.stay.Excursion;
+import businessLogic.stay.Move;
+import businessLogic.stay.Route;
+import businessLogic.stay.StayActivity;
+import businessLogic.stay.StayActivityType;
 import businessLogic.transports.TransportStrategy;
 
-public class StayActivityGenerator implements StayActivityBuilder {
+public class StayActivityBuilder implements IStayActivityBuilder {
 	
 	private static final int MAX_ACTIVITIES = 5;  
 	private static final double MAX_TIME = 5;  
@@ -25,7 +31,7 @@ public class StayActivityGenerator implements StayActivityBuilder {
 	double budget;
 	PeriodOfDay periodOfDay;
 	
-	public StayActivityGenerator(ItineraryGraph itineraryGraph) {
+	public StayActivityBuilder(ItineraryGraph itineraryGraph) {
 		this.itineraryGraph = itineraryGraph;
 	}
 

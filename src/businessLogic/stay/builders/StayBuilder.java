@@ -1,4 +1,4 @@
-package businessLogic.stay;
+package businessLogic.stay.builders;
 
 import java.util.Random;
 
@@ -6,8 +6,11 @@ import businessLogic.StayProfile;
 import businessLogic.itinaryGraph.ItineraryGraph;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.PeriodOfDay;
+import businessLogic.stay.Stay;
+import businessLogic.stay.StayActivity;
+import businessLogic.stay.StayActivityType;
 
-public class StayGenerator implements StayBuilder {
+public class StayBuilder implements IStayBuilder {
 
 	@Override
 	public Stay build(ItineraryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords) {	
@@ -22,7 +25,7 @@ public class StayGenerator implements StayBuilder {
 		stay.setBeginPoint(hotel);
 		
 		// Plan the excursions according to the excursion profile
-		StayActivityBuilder activityBuilder = new StayActivityGenerator(itinaryGraph);
+		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph);
 		int day;
 		boolean dayIsOff = false;
 		for (day = 1; day <= stayDuration; day++) {
