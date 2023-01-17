@@ -133,7 +133,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		TransportStrategy transport = edge.getStrategy();
 		JourneyPoint attraction = edge.getDestination().getPoint();
 		
-		// Impact the budget
+		// Impact the remaining budget
 		double transportCost = transport.calculatePrice(edge.getDistance());
 		double attractionCost = attraction.calculateCost(periodOfDay);
 		
