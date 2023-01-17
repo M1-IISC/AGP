@@ -46,7 +46,8 @@ public class DBDataAccesObject implements DataAccesObject {
 					((Double)line.get("price")).doubleValue(),
 					((Double)line.get("night_price")).doubleValue(),
 					((Double)line.get("lunch_price")).doubleValue(),
-					(CategoryOfSite)line.get("category")
+					(CategoryOfSite)line.get("category"),
+					1 //TODO score
 					));
 		}
 		
@@ -77,7 +78,8 @@ public class DBDataAccesObject implements DataAccesObject {
 					((Double)line.get("price")).doubleValue(),
 					((Double)line.get("night_price")).doubleValue(),
 					((Double)line.get("lunch_price")).doubleValue(),
-					(CategoryOfSite)line.get("category")
+					(CategoryOfSite)line.get("category"),
+					1 //TODO score
 					));
 		}
 		
@@ -114,7 +116,8 @@ public class DBDataAccesObject implements DataAccesObject {
 							((Double)line.get("startCost")).doubleValue(),
 							((Double)line.get("startNightPrice")).doubleValue(),
 							((Double)line.get("startLunchPrice")).doubleValue(),
-							(CategoryOfSite)line.get("startCat")
+							(CategoryOfSite)line.get("startCat"),
+							1 //TODO score
 							),
 					//place destination
 					new PlaceObject(
@@ -125,7 +128,8 @@ public class DBDataAccesObject implements DataAccesObject {
 							((Double)line.get("endCost")).doubleValue(),
 							((Double)line.get("endNightPrice")).doubleValue(),
 							((Double)line.get("endLunchPrice")).doubleValue(),
-							(CategoryOfSite)line.get("endCat")
+							(CategoryOfSite)line.get("endCat"),
+							1 //TODO score
 							),
 						(TransportType)line.get("type"),
 						((Double)line.get("distance")).doubleValue()

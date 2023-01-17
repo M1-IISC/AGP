@@ -138,7 +138,6 @@ public class StayActivityGenerator implements StayActivityBuilder {
 		
 		// Add the minimal cost of the return route to the hotel
 		double Hmin = Double.MAX_VALUE;
-		Edge bestReturnRoute = null;
 		for (Edge returnRoute : edge.getDestination().getEdges()) {
 			if (returnRoute.getDestination().getPoint().getName() == startingPoint.getName()) {
 				double returnTime = returnRoute.getStrategy().calculateTime(returnRoute.getDistance());
@@ -146,7 +145,6 @@ public class StayActivityGenerator implements StayActivityBuilder {
 				double H = (returnTime / MAX_TIME) + (returnPrice / budget);
 				if (H < Hmin) {
 					Hmin = H;
-					bestReturnRoute = returnRoute;
 				}
 			}
 		}

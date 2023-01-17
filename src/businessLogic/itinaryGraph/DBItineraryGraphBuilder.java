@@ -52,7 +52,7 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
 			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
 			
-			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>()) : new Node(asHotel, new ArrayList<Edge>()));
+			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>(), place.getAccuracy()) : new Node(asHotel, new ArrayList<Edge>(),place.getAccuracy()));
 		}
 	}
 }
