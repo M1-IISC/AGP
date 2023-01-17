@@ -23,6 +23,14 @@ public class Stay {
 	public Hotel getBeginPoint() {
 		return beginPoint;
 	}
+	
+	public void setBeginPoint(Hotel hotel) {
+		this.beginPoint = hotel;
+	}
+	
+	public void addActivity(StayActivity activity) {
+		activities.add(activity);
+	}
 
 	public List<StayActivity> getActivities() {
 		return activities;
