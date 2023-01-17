@@ -20,7 +20,7 @@ import businessLogic.stay.Move;
 import businessLogic.stay.Route;
 import businessLogic.stay.StayActivity;
 import businessLogic.stay.StayActivityType;
-import businessLogic.transports.TransportStrategy;
+import businessLogic.transport.TransportStrategy;
 
 public class StayActivityBuilder implements IStayActivityBuilder {
 	

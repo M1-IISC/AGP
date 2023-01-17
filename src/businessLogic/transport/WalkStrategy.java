@@ -1,4 +1,4 @@
-package businessLogic.transports;
+package businessLogic.transport;
 
 public class WalkStrategy extends TransportStrategy {
 	private double confortOverDistance;

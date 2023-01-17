@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import businessLogic.journeyPoint.CategoryOfSite;
-import businessLogic.transports.TransportType;
+import businessLogic.transport.TransportType;
 import persistence.BDeResultSet;
 import persistence.IBDePersistence;
 

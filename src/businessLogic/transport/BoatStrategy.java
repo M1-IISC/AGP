@@ -1,4 +1,4 @@
-package businessLogic.transports;
+package businessLogic.transport;
 
 public class BoatStrategy extends TransportStrategy {
 	private double cost;

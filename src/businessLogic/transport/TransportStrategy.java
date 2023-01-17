@@ -1,4 +1,4 @@
-package businessLogic.transports;
+package businessLogic.transport;
 
 public abstract class TransportStrategy {
 	private double speed;

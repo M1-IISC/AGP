@@ -16,20 +16,20 @@ public interface IBusinessLogicController {
 	
 	/**
 	 * 
-	 * @return all touristic sites that are historical registered in the system.
+	 * @return all tourist sites that are historical registered in the system.
 	 */
 	public abstract List<TouristicSite> getAllHistoricalSites();
 	
 	/**
 	 * 
-	 * @return all touristic sites that are activities registered in the system.
+	 * @return all tourist sites that are activities registered in the system.
 	 */
 	public abstract List<TouristicSite> getAllActivitySites();
 	
 	/**
-	 * Fetch in the system for every touristic sites with matching description keywords
+	 * Fetch in the system for every tourist sites with matching description keywords
 	 * @param keywords words to describe what to look for in the description of activities
-	 * @return a list of a touristic sites, sorted by accuracy.
+	 * @return a list of a tourist sites, sorted by accuracy.
 	 */
 	public abstract List<TouristicSite> searchForTouristicSites(String keywords);
 	
@@ -39,7 +39,7 @@ public interface IBusinessLogicController {
 	 * @param minimumPrice minimum price of the stay.
 	 * @param maximumPrice maximum price of the stay.
 	 * @param profile profile of the stay
-	 * @param quality quality/confort of the stay
+	 * @param quality quality or comfort of the stay
 	 * @param keywords words to describe what to look for in the description of activities
 	 * @return a list of stay plans
 	 */

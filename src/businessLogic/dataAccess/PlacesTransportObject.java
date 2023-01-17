@@ -1,6 +1,6 @@
 package businessLogic.dataAccess;
 
-import businessLogic.transports.TransportType;
+import businessLogic.transport.TransportType;
 
 public class PlacesTransportObject {
 	private PlaceObject siteA;

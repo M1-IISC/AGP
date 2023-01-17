@@ -1,7 +1,7 @@
 package businessLogic.itinerary;
 
 import businessLogic.stay.Route;
-import businessLogic.transports.TransportStrategy;
+import businessLogic.transport.TransportStrategy;
 
 public class Edge {
 	private TransportStrategy strategy;
