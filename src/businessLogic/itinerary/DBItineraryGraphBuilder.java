@@ -65,8 +65,8 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	{
 		if(!nodes.containsKey(place.getName()))
 		{
-			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
-			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
+			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
 			
 			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>(), place.getAccuracy()) : new Node(asHotel, new ArrayList<Edge>(),place.getAccuracy()));
 		}

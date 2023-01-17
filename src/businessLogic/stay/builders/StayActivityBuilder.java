@@ -51,6 +51,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			activity = new Excursion(periodOfDay, itinerary);
 			break;
 		case Move:
+			//TODO add route to the other hotel
 			activity = new Move(periodOfDay, null);
 			break;
 		}
