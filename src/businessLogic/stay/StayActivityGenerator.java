@@ -12,7 +12,6 @@ import businessLogic.itinaryGraph.ItinaryGraph;
 import businessLogic.itinaryGraph.Node;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.JourneyPoint;
-import businessLogic.journeyPoint.JourneyPointFactory;
 import businessLogic.journeyPoint.PeriodOfDay;
 import businessLogic.transports.TransportStrategy;
 

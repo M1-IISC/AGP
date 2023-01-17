@@ -1,22 +1,16 @@
 package businessLogic.stay;
 
 import java.util.Random;
+
+import businessLogic.StayProfile;
+import businessLogic.itinaryGraph.ItinaryGraph;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.PeriodOfDay;
 
 public class StayGenerator implements StayBuilder {
 
 	@Override
-	public Stay build() {
-		
-		int duration = 7;
-		int minBudget = 1000;
-		int maxBudget = 5000;
-		int confort = 3;
-		int excursionRate = 1;
-		String query;
-		
-		
+	public Stay build(ItinaryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords) {	
 		// Tools
 		Random rand = new Random();
 		
@@ -24,14 +18,14 @@ public class StayGenerator implements StayBuilder {
 		Stay stay = new Stay();
 		
 		// Definition of the starting hotel
-		Hotel hotel = selectBestBeginPoint(confort, minBudget, maxBudget);
+		Hotel hotel = selectBestBeginPoint(quality, minimumPrice, maximumPrice);
 		stay.setBeginPoint(hotel);
 		
-		// Plan the excursions according to the excursion rate
-		StayActivityBuilder activityBuilder = new StayActivityGenerator();
+		// Plan the excursions according to the excursion profile
+		StayActivityBuilder activityBuilder = new StayActivityGenerator(itinaryGraph);
 		int day;
 		boolean dayIsOff = false;
-		for (day = 1; day <= duration; day++) {
+		for (day = 1; day <= stayDuration; day++) {
 			StayActivity morningActivity;
 			StayActivity afternoonActivity;
 			if (dayIsOff) {
@@ -39,7 +33,7 @@ public class StayGenerator implements StayBuilder {
 				afternoonActivity = activityBuilder.build(hotel, null, PeriodOfDay.Afternoon, StayActivityType.ChillTime);
 				dayIsOff = false; // Next day is not off
 			} else {
-				if (excursionRate == 1) {
+				if (profile == StayProfile.Discovery || profile == StayProfile.Relax) {
 					int randomPeriodOfExcursion = rand.nextInt(2); 
 					if (randomPeriodOfExcursion == 0) {
 						// The excursion will be in the morning
@@ -51,6 +45,10 @@ public class StayGenerator implements StayBuilder {
 						afternoonActivity = activityBuilder.build(hotel, null, PeriodOfDay.Afternoon, StayActivityType.Excursion);
 						// And chill time in the morning
 						morningActivity = activityBuilder.build(hotel, null,PeriodOfDay.Morning, StayActivityType.ChillTime);
+					}
+					
+					if (profile == StayProfile.Relax) {
+						dayIsOff = true; // Next day will be off for Relax profile
 					}
 				} else {
 					morningActivity = activityBuilder.build(hotel, null, PeriodOfDay.Morning, StayActivityType.Excursion);
@@ -66,8 +64,8 @@ public class StayGenerator implements StayBuilder {
 	}
 	
 	
-	private Hotel selectBestBeginPoint(int confort, int minBudget, int maxBudget) {
-		
+	private Hotel selectBestBeginPoint(double confort, double minBudget, double maxBudget) {
+		// TODO implements this method;
 		return null;
 	}
 	
