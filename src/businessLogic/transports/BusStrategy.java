@@ -3,6 +3,12 @@ package businessLogic.transports;
 public class BusStrategy extends TransportStrategy {
 	private double confortOverDistance;
 	private double cost;
+	
+	public BusStrategy() {
+		super();
+		confortOverDistance = 0;
+		cost = 0;
+	}
 
 	public BusStrategy(double speed, double baseConfort, double confortOverDistance, double cost) {
 		super(speed, baseConfort);

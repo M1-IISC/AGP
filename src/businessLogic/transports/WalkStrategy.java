@@ -3,6 +3,11 @@ package businessLogic.transports;
 public class WalkStrategy extends TransportStrategy {
 	private double confortOverDistance;
 
+	public WalkStrategy() {
+		super();
+		confortOverDistance = 0;
+	}
+
 	public WalkStrategy(double speed, double baseConfort, double confortOverDistance) {
 		super(speed, baseConfort);
 		this.confortOverDistance = confortOverDistance;
@@ -25,7 +30,7 @@ public class WalkStrategy extends TransportStrategy {
 
 	@Override
 	public TransportType getType() {
-		return TransportType.Walk;
+		return TransportType.WALK;
 	}
 
 	public double getConfortOverDistance() {

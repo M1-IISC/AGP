@@ -2,6 +2,11 @@ package businessLogic.transports;
 
 public class BoatStrategy extends TransportStrategy {
 	private double cost;
+	
+	public BoatStrategy() {
+		super();
+		cost = 0;
+	}
 
 	public BoatStrategy(double speed, double baseConfort, double cost) {
 		super(speed, baseConfort);
@@ -28,4 +33,11 @@ public class BoatStrategy extends TransportStrategy {
 		return TransportType.Boat;
 	}
 
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
 }

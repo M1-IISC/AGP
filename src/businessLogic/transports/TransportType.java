@@ -1,7 +1,7 @@
 package businessLogic.transports;
 
 public enum TransportType {
-	Walk,
-	Bus,
-	Boat
+	WALK,
+	BUS,
+	BOAT
 }
