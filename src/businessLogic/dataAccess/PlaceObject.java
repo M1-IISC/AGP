@@ -1,4 +1,4 @@
-package businessLogic.persistance;
+package businessLogic.dataAccess;
 
 import businessLogic.journeyPoint.CategoryOfSite;
 
@@ -11,9 +11,10 @@ public class PlaceObject {
 	private double lunchCost;
 	private double nightcost;
 	private CategoryOfSite category;
+	private double accuracy;
 	
 	public PlaceObject(String name, String description, double confort, double attractionTime, double cost,
-			double lunchCost, double nightcost, CategoryOfSite category) {
+			double lunchCost, double nightcost, CategoryOfSite category, double accurency) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -23,6 +24,15 @@ public class PlaceObject {
 		this.lunchCost = lunchCost;
 		this.nightcost = nightcost;
 		this.category = category;
+		this.accuracy = accurency;
+	}
+
+	public double getAccuracy() {
+		return accuracy;
+	}
+
+	public void setAccuracy(double accurency) {
+		this.accuracy = accurency;
 	}
 
 	public String getName() {

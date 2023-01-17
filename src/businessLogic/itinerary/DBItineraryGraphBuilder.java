@@ -1,15 +1,15 @@
-package businessLogic.itinaryGraph;
+package businessLogic.itinerary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import businessLogic.dataAccess.DataAccesObject;
+import businessLogic.dataAccess.PlaceObject;
+import businessLogic.dataAccess.PlacesTransportObject;
 import businessLogic.journeyPoint.JourneyPoint;
 import businessLogic.journeyPoint.JourneyPointFactory;
-import businessLogic.persistance.PlaceObject;
-import businessLogic.persistance.PlacesTransportObject;
-import businessLogic.persistance.DataAccesObject;
 
 public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	
@@ -52,7 +52,7 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
 			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
 			
-			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>()) : new Node(asHotel, new ArrayList<Edge>()));
+			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>(), place.getAccuracy()) : new Node(asHotel, new ArrayList<Edge>(),place.getAccuracy()));
 		}
 	}
 }
