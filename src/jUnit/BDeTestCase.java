@@ -49,5 +49,17 @@ public class BDeTestCase {
 		assertNull(bdePersistence.executeQuery("DELETE FROM Place WHERE name = 'Hotel1'"));
 		assertNull(bdePersistence.executeQuery("UPDATE Place SET name = 'Hotel2' WHERE name = 'Hotel1'"));
 	}
+	
+	/**
+	 * This method is used to test the good execution of a combined query
+	 */
+	@Test
+	public void testExecuteCombinedQuery() {
+		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name FROM Site s WHERE s.category = 'LEISURE' WITH plage");
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		System.out.println(bdeResultSet.getCurrentItem());
+	}
 
 }
