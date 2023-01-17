@@ -30,7 +30,7 @@ public class BoatStrategy extends TransportStrategy {
 
 	@Override
 	public TransportType getType() {
-		return TransportType.Boat;
+		return TransportType.BOAT;
 	}
 
 	public double getCost() {

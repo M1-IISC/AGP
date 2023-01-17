@@ -49,6 +49,6 @@ public class BusStrategy extends TransportStrategy {
 
 	@Override
 	public TransportType getType() {
-		return TransportType.Bus;
+		return TransportType.BUS;
 	}
 }
