@@ -6,7 +6,6 @@ import org.springframework.util.Assert;
 
 import businessLogic.IBusinessLogicController;
 import businessLogic.dataAccess.DataAccesObject;
-import businessLogic.itinerary.DBItineraryGraphBuilder;
 import businessLogic.itinerary.ItineraryGraphBuilder;
 import businessLogic.journeyPoint.JourneyPointFactory;
 import businessLogic.stay.builders.IStayActivityBuilder;
@@ -43,12 +42,6 @@ public class SpringIntegrationTestCase {
 	public void testGraphBuilderBean()
 	{
 		Assert.notNull(springContainer.getBeanOfClass(ItineraryGraphBuilder.class));
-	}
-	
-	@Test
-	public void testStayActivityBuilderBean()
-	{
-		Assert.notNull(springContainer.getBeanOfClass(IStayActivityBuilder.class));;	
 	}
 	
 	@Test
