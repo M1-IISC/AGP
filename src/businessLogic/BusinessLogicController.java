@@ -3,6 +3,7 @@ package businessLogic;
 import java.util.ArrayList;
 import java.util.List;
 
+import businessLogic.journeyPoint.CategoryOfSite;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.JourneyPointFactory;
 import businessLogic.journeyPoint.TouristicSite;
@@ -34,7 +35,9 @@ public class BusinessLogicController implements IBusinessLogicController {
 		
 		for(PlaceObject place : places) {
 			Hotel hotel = (Hotel) hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
-			hotels.add(hotel);
+			if (hotel != null) {
+				hotels.add(hotel);
+			}
 		}
 		
 		return hotels;
@@ -42,20 +45,51 @@ public class BusinessLogicController implements IBusinessLogicController {
 
 	@Override
 	public List<TouristicSite> getAllHistoricalSites() {
-		// TODO Auto-generated method stub
-		return null;
+		List<TouristicSite> touristicSites = new ArrayList<>();
+		List<PlaceObject> places = dataAccessor.fetchAllSites();
+		
+		for(PlaceObject place : places) {
+			if (place.getCategory() == CategoryOfSite.HISTORIC) {
+				TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+				if (touristicSite != null) {
+					touristicSites.add(touristicSite);
+				}
+			}
+		}
+		
+		return touristicSites;
 	}
 
 	@Override
 	public List<TouristicSite> getAllActivitySites() {
-		// TODO Auto-generated method stub
-		return null;
+		List<TouristicSite> touristicSites = new ArrayList<>();
+		List<PlaceObject> places = dataAccessor.fetchAllSites();
+		
+		for(PlaceObject place : places) {
+			if (place.getCategory() == CategoryOfSite.LEISURE) {
+				TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+				if (touristicSite != null) {
+					touristicSites.add(touristicSite);
+				}
+			}
+		}
+		
+		return touristicSites;
 	}
 
 	@Override
 	public List<TouristicSite> searchForTouristicSites(String keywords) {
-		// TODO Auto-generated method stub
-		return null;
+		List<TouristicSite> touristicSites = new ArrayList<>();
+		List<PlaceObject> places = dataAccessor.fetchSitesByKeywords(keywords);
+		
+		for(PlaceObject place : places) {
+			TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+			if (touristicSite != null) {
+				touristicSites.add(touristicSite);
+			}
+		}
+		
+		return touristicSites;
 	}
 
 	@Override
