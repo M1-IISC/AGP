@@ -13,7 +13,7 @@
 			<value>1</value>
 		</property>
 		<property name="confortOverDistance">
-			<value>-1 * (1/6)</value>
+			<value>-0.16</value>
 		</property>
 	</bean>
 	<bean id="BusStrategy" class="businessLogic.transports.BusStrategy" parent="TransportStrategy">
@@ -21,10 +21,10 @@
 			<value>30</value>
 		</property>
 		<property name="baseConfort">
-			<value>4/5</value>
+			<value>0.8</value>
 		</property>
 		<property name="confortOverDistance">
-			<value>-1 * (1/30) * (4/5)</value>
+			<value>-0.025</value>
 		</property>
 		<property name="cost">
 			<value>5</value>
@@ -35,7 +35,7 @@
 			<value>60</value>
 		</property>
 		<property name="baseConfort">
-			<value>4/5</value>
+			<value>0.8</value>
 		</property>
 		<property name="cost">
 			<value>50</value>
