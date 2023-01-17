@@ -17,6 +17,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -26,6 +27,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.primefaces.shaded.commons.io.FilenameUtils;
 
 public class BDePersistence implements IBDePersistence {
 	
@@ -43,16 +45,20 @@ public class BDePersistence implements IBDePersistence {
 
 	@Override
 	public void createTextIndex() {
-		Path indexpath = FileSystems.getDefault().getPath(indexPath);
 	    Directory index;
 		try {
-			index = FSDirectory.open(indexpath);
+			index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
+			
+			if (DirectoryReader.indexExists(index)) {
+				return;
+			}
+			
 			IndexWriterConfig config = new IndexWriterConfig(analyseur);
 			IndexWriter w = new IndexWriter(index, config);
 			
 			for (File f : new File(repositoryPath).listFiles()) {
 			   	Document doc = new Document();
-			   	doc.add(new Field("name", f.getName(), TextField.TYPE_STORED));
+			   	doc.add(new Field("name", FilenameUtils.removeExtension(f.getName()), TextField.TYPE_STORED));
 			   	doc.add(new Field("content", new FileReader(f), TextField.TYPE_NOT_STORED));
 			   	w.addDocument(doc);
 		    }
@@ -86,7 +92,7 @@ public class BDePersistence implements IBDePersistence {
 				return null;
 			}
 			
-			String[] queries = query.split(combinedQueryRegex);
+			String[] queries = Pattern.compile("[,&]|with", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).split(query);
 			String sqlQuery = queries[0];
 			String textQuery = queries[1];
 			
@@ -127,10 +133,9 @@ public class BDePersistence implements IBDePersistence {
 	private LuceneTextResultSet executeTextQuery(String textQuery) {
 		List<Map<String, Object>> results = new ArrayList<>();
 		
-		Path indexpath = FileSystems.getDefault().getPath(repositoryPath);
 	    Directory index;
 		try {
-			index = FSDirectory.open(indexpath);
+			index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
 			DirectoryReader ireader = DirectoryReader.open(index);
 		    IndexSearcher searcher = new IndexSearcher(ireader);
 		    	
@@ -141,17 +146,21 @@ public class BDePersistence implements IBDePersistence {
 		    
 		    for (int i = 0; i < luceneResults.scoreDocs.length; i++) {
 		    	int docId = luceneResults.scoreDocs[i].doc;
+		    	float docScore = luceneResults.scoreDocs[i].score;
 		    	Document d = searcher.doc(docId);
 		    	
 		    	Map<String, Object> result = new HashMap<>();
 		    	result.put(keyName, d.get("name"));
 		    	result.put("description", d.get("content"));
-		    	result.put("score", luceneResults.scoreDocs[i].score);
+		    	result.put("score", docScore);
 		    	
 		    	results.add(result);
 		    }
 		    
 		    ireader.close();
+		    
+		    LuceneTextResultSet textResultSet = new LuceneTextResultSet(results);
+			return textResultSet;
 		} catch (IOException e) {
 			// TODO
 			System.err.println(e.getMessage());
@@ -161,9 +170,6 @@ public class BDePersistence implements IBDePersistence {
 			System.err.println(e.getMessage());
 			return null;
 		}
-		
-		LuceneTextResultSet textResultSet = new LuceneTextResultSet(results);
-		return textResultSet;
 	}
 
 }

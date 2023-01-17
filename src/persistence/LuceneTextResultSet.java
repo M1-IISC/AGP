@@ -21,7 +21,7 @@ class LuceneTextResultSet implements BDeResultSet {
 	@Override
 	public boolean next() {
 		index++;
-		return (index > 0 && index < textResultSet.size());
+		return (index >= 0 && index < textResultSet.size());
 	}
 
 	@Override

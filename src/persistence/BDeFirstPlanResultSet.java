@@ -13,6 +13,7 @@ class BDeFirstPlanResultSet implements BDeResultSet {
 	public BDeFirstPlanResultSet(JdbcSqlResultSet sqlResultSet, LuceneTextResultSet textResultSet, String keyName) {
 		this.sqlResultSet = sqlResultSet;
 		this.textResultSet = textResultSet;
+		this.keyName = keyName;
 		this.currentResult = null;
 		init();
 	}
