@@ -1,5 +1,5 @@
 package businessLogic.stay;
 
 public interface StayBuilder {
-	public abstract Stay build();
+	public abstract Stay build(ItinaryGraph itinaryGraph);
 }

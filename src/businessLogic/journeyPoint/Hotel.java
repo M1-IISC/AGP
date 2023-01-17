@@ -27,4 +27,9 @@ public class Hotel extends JourneyPoint {
 	public double getLunchCost() {
 		return lunchCost;
 	}
+
+	@Override
+	public double getAttractionTime() {
+		return 0;
+	}
 }

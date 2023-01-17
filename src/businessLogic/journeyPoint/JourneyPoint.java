@@ -13,6 +13,8 @@ public abstract class JourneyPoint {
 	public abstract double calculateCost(PeriodOfDay period);
 	
 	public abstract String getDescription();
+	
+	public abstract double getAttractionTime();
 
 	public double getConfort() {
 		return confort;
@@ -20,5 +22,6 @@ public abstract class JourneyPoint {
 
 	public String getName() {
 		return name;
-	}	
+	}
+	
 }
