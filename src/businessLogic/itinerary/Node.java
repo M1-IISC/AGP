@@ -1,4 +1,4 @@
-package businessLogic.itinaryGraph;
+package businessLogic.itinerary;
 
 import java.util.List;
 

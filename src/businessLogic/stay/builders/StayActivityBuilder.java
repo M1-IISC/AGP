@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import businessLogic.itinaryGraph.Edge;
-import businessLogic.itinaryGraph.ItineraryGraph;
-import businessLogic.itinaryGraph.Node;
+import businessLogic.itinerary.Edge;
+import businessLogic.itinerary.ItineraryGraph;
+import businessLogic.itinerary.Node;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.JourneyPoint;
 import businessLogic.journeyPoint.PeriodOfDay;

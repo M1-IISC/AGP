@@ -1,8 +1,8 @@
 package businessLogic.stay.builders;
 
-import businessLogic.StayProfile;
-import businessLogic.itinaryGraph.ItineraryGraph;
+import businessLogic.itinerary.ItineraryGraph;
 import businessLogic.stay.Stay;
+import businessLogic.stay.StayProfile;
 
 public interface IStayBuilder {
 	

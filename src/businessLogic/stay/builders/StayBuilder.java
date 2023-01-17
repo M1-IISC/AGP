@@ -2,13 +2,13 @@ package businessLogic.stay.builders;
 
 import java.util.Random;
 
-import businessLogic.StayProfile;
-import businessLogic.itinaryGraph.ItineraryGraph;
+import businessLogic.itinerary.ItineraryGraph;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.PeriodOfDay;
 import businessLogic.stay.Stay;
 import businessLogic.stay.StayActivity;
 import businessLogic.stay.StayActivityType;
+import businessLogic.stay.StayProfile;
 
 public class StayBuilder implements IStayBuilder {
 

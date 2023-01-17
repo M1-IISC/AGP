@@ -1,4 +1,4 @@
-package businessLogic;
+package businessLogic.stay;
 
 public enum StayProfile {
 	Relax,

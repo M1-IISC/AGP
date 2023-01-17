@@ -1,4 +1,4 @@
-package businessLogic.itinaryGraph;
+package businessLogic.itinerary;
 
 import businessLogic.stay.Route;
 import businessLogic.transports.TransportStrategy;
