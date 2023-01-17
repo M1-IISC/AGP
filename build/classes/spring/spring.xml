@@ -3,5 +3,44 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	
+	<bean id="TransportStrategy" class="businessLogic.transports.TransportStrategy" abstract="true"/>
+	<bean id="WalkStrategy" class="businessLogic.transports.WalkStrategy" parent="TransportStrategy">
+		<property name="speed">
+			<value>4</value>
+		</property>
+		<property name="baseConfort">
+			<value>1</value>
+		</property>
+		<property name="confortOverDistance">
+			<value>-0.25</value>
+		</property>
+	</bean>
+	<bean id="BusStrategy" class="businessLogic.transports.BusStrategy" parent="TransportStrategy">
+		<property name="speed">
+			<value>30</value>
+		</property>
+		<property name="baseConfort">
+			<value>4/5</value>
+		</property>
+		<property name="confortOverDistance">
+			<value>-1 * (1/30) * (4/5)</value>
+		</property>
+		<property name="cost">
+			<value>5</value>
+		</property>
+	</bean>
+	<bean id="BusStrategy" class="businessLogic.transports.BoatStrategy" parent="TransportStrategy">
+		<property name="speed">
+			<value>60</value>
+		</property>
+		<property name="baseConfort">
+			<value>4/5</value>
+		</property>
+		<property name="cost">
+			<value>50</value>
+		</property>
+	</bean>
 
+	<bean id="DataAccesObject" class="businessLogic.persistance.DataAccesObject" abstract="true"/>
 </beans>
