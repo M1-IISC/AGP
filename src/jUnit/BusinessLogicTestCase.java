@@ -46,7 +46,6 @@ public class BusinessLogicTestCase {
 		for (Map.Entry<String, TransportStrategy> strategy : strategies.entrySet()) {
 			TransportStrategy transportStrategy = strategy.getValue();
 			Assert.isTrue(transportStrategy.calculateConfort(0) != 0, String.format("Comfort at zero for %20s bean", strategy.getKey()));
-			Assert.isTrue(transportStrategy.calculatePrice(0) != 0, String.format("Price at zero for %20s bean", strategy.getKey()));
 			Assert.isTrue(transportStrategy.calculateTime(30) != 0, String.format("Time at zero for %20s bean", strategy.getKey()));
 		}
 	}

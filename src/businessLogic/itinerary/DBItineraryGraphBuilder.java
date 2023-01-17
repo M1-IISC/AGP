@@ -13,13 +13,13 @@ import businessLogic.journeyPoint.JourneyPointFactory;
 
 public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	
-	private DataAccesObject DataAccesor;
+	private DataAccesObject dataAccessor;
 	private JourneyPointFactory hotelFactory;
 	private JourneyPointFactory touristicSiteFactory;
 	
-	public DBItineraryGraphBuilder(DataAccesObject dataAccesor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
+	public DBItineraryGraphBuilder(DataAccesObject dataAccessor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
 		super();
-		DataAccesor = dataAccesor;
+		this.dataAccessor = dataAccessor;
 		this.hotelFactory = hotelFactory;
 		this.touristicSiteFactory = touristicSiteFactory;
 	}
@@ -28,8 +28,20 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 		super();
 	}
 
-	public DataAccesObject getDataAccesor() {
-		return DataAccesor;
+	public void setDataAccessor(DataAccesObject dataAccesor) {
+		this.dataAccessor = dataAccesor;
+	}
+
+	public void setHotelFactory(JourneyPointFactory hotelFactory) {
+		this.hotelFactory = hotelFactory;
+	}
+
+	public void setTouristicSiteFactory(JourneyPointFactory touristicSiteFactory) {
+		this.touristicSiteFactory = touristicSiteFactory;
+	}
+
+	public DataAccesObject getDataAccessor() {
+		return dataAccessor;
 	}
 
 	public JourneyPointFactory getHotelFactory() {
@@ -42,7 +54,7 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 
 	@Override
 	public ItineraryGraph build(String keywords) {
-		List<PlacesTransportObject> places = DataAccesor.fetchSitesRelationsByKeywords(keywords);
+		List<PlacesTransportObject> places = dataAccessor.fetchSitesRelationsByKeywords(keywords);
 		if (places == null || places.size()==0) 
 			return null;
 		Map<String, Node> nodes = new HashMap<String, Node>();
