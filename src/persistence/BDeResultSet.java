@@ -17,7 +17,7 @@ public interface BDeResultSet {
 	/**
 	 * This method is used to move the cursor to the next result of the result set.
 	 */
-	public void next();
+	public boolean next();
 	
 	/**
 	 * This method is used to get the current item of the result set where the cursor is located.
