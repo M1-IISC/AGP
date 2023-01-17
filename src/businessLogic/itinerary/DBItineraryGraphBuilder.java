@@ -13,15 +13,31 @@ import businessLogic.journeyPoint.JourneyPointFactory;
 
 public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	
-	private final DataAccesObject DataAccesor;
-	private final JourneyPointFactory hotelFactory;
-	private final JourneyPointFactory touristicSiteFactory;
+	private DataAccesObject DataAccesor;
+	private JourneyPointFactory hotelFactory;
+	private JourneyPointFactory touristicSiteFactory;
 	
 	public DBItineraryGraphBuilder(DataAccesObject dataAccesor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
 		super();
 		DataAccesor = dataAccesor;
 		this.hotelFactory = hotelFactory;
 		this.touristicSiteFactory = touristicSiteFactory;
+	}
+	
+	public DBItineraryGraphBuilder() {
+		super();
+	}
+
+	public DataAccesObject getDataAccesor() {
+		return DataAccesor;
+	}
+
+	public JourneyPointFactory getHotelFactory() {
+		return hotelFactory;
+	}
+
+	public JourneyPointFactory getTouristicSiteFactory() {
+		return touristicSiteFactory;
 	}
 
 	@Override
