@@ -33,7 +33,7 @@ public interface IBusinessLogicController {
 	public abstract List<TouristicSite> searchForTouristicSites(String keywords);
 	
 	/**
-	 * Planify a stay with matching criteria.
+	 * Compute several plan a stay with matching criteria.
 	 * @param stayDuration duration of the stay
 	 * @param minimumPrice minimum price of the stay.
 	 * @param maximumPrice maximum price of the stay.
