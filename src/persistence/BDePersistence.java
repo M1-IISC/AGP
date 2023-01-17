@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -30,18 +31,19 @@ public class BDePersistence implements IBDePersistence {
 	
 	private Analyzer analyseur = new StandardAnalyzer();
 	
-	private String tableName, keyName, repositoryPath;
+	private String tableName, keyName, repositoryPath, indexPath;
 
 	@Override
 	public void configure(String tableName, String keyName, String repositoryPath) {
 		this.tableName = tableName;
 		this.keyName = keyName;
 		this.repositoryPath = repositoryPath;
+		this.indexPath = Paths.get(repositoryPath).getParent().toString() + "/index";
 	}
 
 	@Override
 	public void createTextIndex() {
-		Path indexpath = FileSystems.getDefault().getPath(repositoryPath);
+		Path indexpath = FileSystems.getDefault().getPath(indexPath);
 	    Directory index;
 		try {
 			index = FSDirectory.open(indexpath);
@@ -57,8 +59,8 @@ public class BDePersistence implements IBDePersistence {
 		   		
 		   	w.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -70,12 +72,17 @@ public class BDePersistence implements IBDePersistence {
 
 	@Override
 	public BDeResultSet executeQuery(String query) {
-		String combinedQueryRegex = "/^(.*?(\bwith\b)[^$]*)$/i";
-		String tableNameRegex = "/^(.*?(\b" + tableName + "\b)[^$]*)$/i";
-		String selectRegex = "/^(.*?(\bselect\b)[^$]*)$/i";
-		if (query.matches(combinedQueryRegex)) {
-			if (!query.matches(tableNameRegex) || !query.matches(selectRegex)) {
-				// TODO here
+		String combinedQueryRegex = "^(.*?(\\bwith\\b)[^$]*)$";
+		String tableNameRegex = "^(.*?(\\b" + tableName + "\\b)[^$]*)$";
+		String selectRegex = "^(.*?(\\bselect\\b)[^$]*)$";
+		
+		if (!Pattern.compile(selectRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {
+			return null;
+		}
+		
+		if (Pattern.compile(combinedQueryRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {
+			if (!Pattern.compile(tableNameRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {
+				System.err.println("The table " + tableName + " has no text index");
 				return null;
 			}
 			
@@ -84,6 +91,10 @@ public class BDePersistence implements IBDePersistence {
 			String textQuery = queries[1];
 			
 			// TODO exception if queries length is not equals to 2 & if 0 and 1 is null
+			if (queries.length != 2 || sqlQuery.length() == 0 || textQuery.length() == 0) {
+				System.err.println("Error when interpretting combined query");
+				return null;
+			}
 			
 			JdbcSqlResultSet sqlResultSet = executeSqlQuery(sqlQuery);
 			LuceneTextResultSet textResultSet = executeTextQuery(textQuery);
@@ -107,8 +118,8 @@ public class BDePersistence implements IBDePersistence {
 			JdbcSqlResultSet sqlResultSet = new JdbcSqlResultSet(resultSet);
 			return sqlResultSet;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO
+			System.err.println(e.getMessage());
 			return null;
 		}
 	}
@@ -142,12 +153,12 @@ public class BDePersistence implements IBDePersistence {
 		    
 		    ireader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO
+			System.err.println(e.getMessage());
 			return null;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO
+			System.err.println(e.getMessage());
 			return null;
 		}
 		
