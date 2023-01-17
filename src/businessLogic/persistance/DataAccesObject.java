@@ -3,9 +3,13 @@ package businessLogic.persistance;
 import java.util.List;
 
 public interface DataAccesObject {
-	public List<DBPlaceObject> fetchAllPlaces();
+	public List<PlaceObject> fetchAllHotels();
 	
-	public List<DBPlaceObject> fetchSitesByKeywords(String keywords);
+	public List<PlaceObject> fetchAllSites();
 	
-	public List<DBPlacesTransportObject> fetchSitesRelationsByKeywords(String keywords);
+	public List<PlaceObject> fetchAllPlaces();
+	
+	public List<PlaceObject> fetchSitesByKeywords(String keywords);
+	
+	public List<PlacesTransportObject> fetchSitesRelationsByKeywords(String keywords);
 }

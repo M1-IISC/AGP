@@ -1,6 +1,8 @@
 package businessLogic.persistance;
 
-public class DBPlaceObject {
+import businessLogic.journeyPoint.CategoryOfSite;
+
+public class PlaceObject {
 	private String name;
 	private String description;
 	private double confort;
@@ -8,9 +10,10 @@ public class DBPlaceObject {
 	private double cost;
 	private double lunchCost;
 	private double nightcost;
+	private CategoryOfSite category;
 	
-	public DBPlaceObject(String name, String description, double confort, double attractionTime, double cost,
-			double lunchCost, double nightcost) {
+	public PlaceObject(String name, String description, double confort, double attractionTime, double cost,
+			double lunchCost, double nightcost, CategoryOfSite category) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -19,6 +22,7 @@ public class DBPlaceObject {
 		this.cost = cost;
 		this.lunchCost = lunchCost;
 		this.nightcost = nightcost;
+		this.category = category;
 	}
 
 	public String getName() {
@@ -75,6 +79,14 @@ public class DBPlaceObject {
 
 	public void setNightcost(double nightcost) {
 		this.nightcost = nightcost;
+	}
+
+	public CategoryOfSite getCategory() {
+		return category;
+	}
+
+	public void setCategory(CategoryOfSite category) {
+		this.category = category;
 	}
 	
 	
