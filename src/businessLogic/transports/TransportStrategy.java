@@ -18,6 +18,14 @@ public abstract class TransportStrategy {
 	
 	public abstract TransportType getType();
 
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public void setBaseConfort(double baseConfort) {
+		this.baseConfort = baseConfort;
+	}
+
 	public double getSpeed() {
 		return speed;
 	}

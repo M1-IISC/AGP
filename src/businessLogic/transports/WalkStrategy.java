@@ -27,4 +27,14 @@ public class WalkStrategy extends TransportStrategy {
 	public TransportType getType() {
 		return TransportType.Walk;
 	}
+
+	public double getConfortOverDistance() {
+		return confortOverDistance;
+	}
+
+	public void setConfortOverDistance(double confortOverDistance) {
+		this.confortOverDistance = confortOverDistance;
+	}
+	
+	
 }
