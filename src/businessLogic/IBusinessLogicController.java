@@ -5,6 +5,7 @@ import java.util.List;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.TouristicSite;
 import businessLogic.stay.Stay;
+import businessLogic.stay.StayProfile;
 
 public interface IBusinessLogicController {
 	/**

@@ -1,4 +1,4 @@
-package businessLogic.persistance;
+package businessLogic.dataAccess;
 
 import businessLogic.transports.TransportType;
 
