@@ -40,6 +40,7 @@ public class BusinessLogicTestCase {
 	@Test
 	public void transportStrategyTest()
 	{
+		@SuppressWarnings("unchecked")
 		Map<String, TransportStrategy> strategies = (Map<String, TransportStrategy>) springContainer.getAllBeansOfClass(TransportStrategy.class);
 		Assert.notNull(strategies);
 		Assert.notEmpty(strategies);
