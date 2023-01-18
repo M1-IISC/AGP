@@ -34,7 +34,7 @@ public class BusinessLogicController implements IBusinessLogicController {
 		List<PlaceObject> places = dataAccessor.fetchAllHotels();
 		
 		for(PlaceObject place : places) {
-			Hotel hotel = (Hotel) hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+			Hotel hotel = (Hotel) hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
 			if (hotel != null) {
 				hotels.add(hotel);
 			}
@@ -50,7 +50,7 @@ public class BusinessLogicController implements IBusinessLogicController {
 		
 		for(PlaceObject place : places) {
 			if (place.getCategory() == CategoryOfSite.HISTORIC) {
-				TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+				TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
 				if (touristicSite != null) {
 					touristicSites.add(touristicSite);
 				}
@@ -67,7 +67,7 @@ public class BusinessLogicController implements IBusinessLogicController {
 		
 		for(PlaceObject place : places) {
 			if (place.getCategory() == CategoryOfSite.LEISURE) {
-				TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+				TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
 				if (touristicSite != null) {
 					touristicSites.add(touristicSite);
 				}
@@ -83,7 +83,7 @@ public class BusinessLogicController implements IBusinessLogicController {
 		List<PlaceObject> places = dataAccessor.fetchSitesByKeywords(keywords);
 		
 		for(PlaceObject place : places) {
-			TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+			TouristicSite touristicSite = (TouristicSite) touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
 			if (touristicSite != null) {
 				touristicSites.add(touristicSite);
 			}

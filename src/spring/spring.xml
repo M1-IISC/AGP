@@ -49,13 +49,13 @@
 	<bean id="DataAccesObject" class="businessLogic.dataAccess.DataAccesObject" abstract="true"/>
 	<bean id="DBDataAccesObject" class="businessLogic.dataAccess.DBDataAccesObject" parent="DataAccesObject">
 		<property name="persistanceLayerInterface" ref="BDePersistence"/>
-	</bean>
-	
-	
-	
+	</bean>	
 	
 	<bean id="JourneyPointFactory" class="businessLogic.journeyPoint.JourneyPointFactory" abstract="true"/>
 	<bean id="HotelFactory" class="businessLogic.journeyPoint.HotelFactory" parent="JourneyPointFactory"/>
 	<bean id="TouristicSiteFactory" class="businessLogic.journeyPoint.TouristicSiteFactory" parent="JourneyPointFactory"/>
+	
+	<bean id="ItineraryGraphBuilder" class="businessLogic.itinerary.ItineraryGraphBuilder" abstract="true"/>
+	<bean id="DBItineraryGraphBuilder" class="businessLogic.itinerary.DBItineraryGraphBuilder" parent="ItineraryGraphBuilder"/>
 	
 </beans>

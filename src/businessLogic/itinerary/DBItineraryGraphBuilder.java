@@ -13,15 +13,31 @@ import businessLogic.journeyPoint.JourneyPointFactory;
 
 public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	
-	private final DataAccesObject DataAccesor;
-	private final JourneyPointFactory hotelFactory;
-	private final JourneyPointFactory touristicSiteFactory;
+	private DataAccesObject DataAccesor;
+	private JourneyPointFactory hotelFactory;
+	private JourneyPointFactory touristicSiteFactory;
 	
 	public DBItineraryGraphBuilder(DataAccesObject dataAccesor, JourneyPointFactory touristicSiteFactory, JourneyPointFactory hotelFactory) {
 		super();
 		DataAccesor = dataAccesor;
 		this.hotelFactory = hotelFactory;
 		this.touristicSiteFactory = touristicSiteFactory;
+	}
+	
+	public DBItineraryGraphBuilder() {
+		super();
+	}
+
+	public DataAccesObject getDataAccesor() {
+		return DataAccesor;
+	}
+
+	public JourneyPointFactory getHotelFactory() {
+		return hotelFactory;
+	}
+
+	public JourneyPointFactory getTouristicSiteFactory() {
+		return touristicSiteFactory;
 	}
 
 	@Override
@@ -49,8 +65,8 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	{
 		if(!nodes.containsKey(place.getName()))
 		{
-			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
-			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightcost(), place.getCategory());
+			JourneyPoint asHotel = hotelFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
+			JourneyPoint asSite = touristicSiteFactory.factory(place.getName(), place.getDescription(), place.getConfort(), place.getAttractionTime(), place.getCost(), place.getLunchCost(), place.getNightCost(), place.getCategory());
 			
 			nodes.put(place.getName(), asHotel == null ? new Node(asSite, new ArrayList<Edge>(), place.getAccuracy()) : new Node(asHotel, new ArrayList<Edge>(),place.getAccuracy()));
 		}
