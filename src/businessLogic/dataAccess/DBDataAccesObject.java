@@ -25,14 +25,12 @@ public class DBDataAccesObject implements DataAccesObject {
 
 	@Override
 	public List<PlaceObject> fetchAllHotels() {
-		// TODO Auto-generated method stub
 		LinkedList<PlaceObject> placeObjectList = new LinkedList<PlaceObject>();
 		
 		String querry = String.format("SELECT p.name, p.comfort, h.night_price, h.lunch_price\r\n"
 				+ "FROM place p INNER JOIN hotel h ON p.name = h.name\r\n");
 		
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
-		resultSet.init();
 		while (resultSet.next())
 		{
 			Map<String, Object> line = resultSet.getCurrentItem();
@@ -58,25 +56,23 @@ public class DBDataAccesObject implements DataAccesObject {
 		// TODO Auto-generated method stub
 		LinkedList<PlaceObject> placeObjectList = new LinkedList<PlaceObject>();
 		
-		String querry = String.format("SELECT p.name, p.comfort, s.price, s.duration, s.category\r\n"
-				+ "FROM place p INNER JOIN site s ON p.name = s.name");
+		String querry = String.format("SELECT p.name, p.comfort, s.price, s.duration, s.category "
+				+ "FROM place p INNER JOIN site s ON p.name = s.name WITH *:*");
 		
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
-		resultSet.init();
 		while (resultSet.next())
 		{
 			Map<String, Object> line = resultSet.getCurrentItem();
-			//here note we do not use the score to filter, but we should
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
-					"" ,//TODO get description
+					(String)line.get("description"),
 					getValue((Float)line.get("comfort")),
 					getValue((Float)line.get("duration")),
 					getValue((Float)line.get("price")),
 					0,
 					0,
 					getSiteValue(line.get("category")),
-					1
+					 getValue((Float)line.get("score"))
 					));
 		}
 		return placeObjectList;
@@ -86,26 +82,24 @@ public class DBDataAccesObject implements DataAccesObject {
 	public List<PlaceObject> fetchAllPlaces() {
 		LinkedList<PlaceObject> placeObjectList = new LinkedList<PlaceObject>();
 		
-		//TODO request text
-		String querry = String.format("SELECT p.name, p.comfort, h.night_price, h.lunch_price, s.price, s.duration, s.category\r\n"
-				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name;\n");
+		String querry = String.format("SELECT p.name, p.comfort, h.night_price, h.lunch_price, s.price, s.duration, s.category "
+				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name WITH *:*");
 		
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
-		resultSet.init();
 		while (resultSet.next())
 		{
 			Map<String, Object> line = resultSet.getCurrentItem();
-			//here note we do not use the score to filter, but we should
+
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
-					line.get("price") == null? null: "" ,//TODO get description
+					line.containsKey("description") ? (String)line.get("description") : null ,
 					getValue((Float)line.get("comfort")),
 					getValue((Float)line.get("duration")),
 					getValue((Float)line.get("price")),
 					getValue((Float)line.get("night_price")),
 					getValue((Float)line.get("lunch_price")),
 					getSiteValue(line.get("category")),
-					1
+					line.containsKey("score") ? getValue((Float)line.get("score")) : 1
 					));
 		}
 		
@@ -117,28 +111,22 @@ public class DBDataAccesObject implements DataAccesObject {
 	public List<PlaceObject> fetchSitesByKeywords(String keywords) {
 		LinkedList<PlaceObject> placeObjectList = new LinkedList<PlaceObject>();
 		
-		//TODO fix lucene
-		
-		//TODO add keywords
 		String querry = String.format("SELECT p.name, p.comfort, h.night_price, h.lunch_price, s.price, s.duration, s.category "
-				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name %s %s", keywords.isEmpty() ? "":"WITH", keywords);
+				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name WITH %s", keywords.isEmpty() ? "*:*" : keywords);
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
-		//TODO iterator->next when it work
-		resultSet.init();
 		while (resultSet.next())
 		{
 			Map<String, Object> line = resultSet.getCurrentItem();
-			//here note we do not use the score to filter, but we should
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
-					(String)line.get("description"),
+					line.containsKey("description") ? (String)line.get("description") : null ,
 					getValue((Float)line.get("comfort")),
 					getValue((Float)line.get("duration")),
 					getValue((Float)line.get("price")),
 					getValue((Float)line.get("lunch_price")),
 					getValue((Float)line.get("night_price")),
 					getSiteValue(line.get("category")),
-					getValue((Float)line.get("score"))
+					line.containsKey("score") ? getValue((Float)line.get("score")) : 1
 					));
 		}
 		
@@ -160,7 +148,6 @@ public class DBDataAccesObject implements DataAccesObject {
 				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name) AS T2 ON transport.end_place = endName");
 		
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
-		resultSet.init();
 		while (resultSet.next())
 		{
 			Map<String, Object> line = resultSet.getCurrentItem();

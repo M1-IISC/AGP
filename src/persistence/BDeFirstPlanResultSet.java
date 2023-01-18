@@ -20,7 +20,6 @@ class BDeFirstPlanResultSet implements BDeResultSet {
 		this.sqlResultSet = sqlResultSet;
 		this.textResultSet = textResultSet;
 		this.keyName = keyName;
-		this.currentResult = null;
 		init();
 	}
 
@@ -29,6 +28,7 @@ class BDeFirstPlanResultSet implements BDeResultSet {
 		// Init queries result set
 		sqlResultSet.init();
 		textResultSet.init();
+		currentResult = null;
 	}
 
 	@Override

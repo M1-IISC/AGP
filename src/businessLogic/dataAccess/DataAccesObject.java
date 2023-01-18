@@ -9,7 +9,9 @@ public interface DataAccesObject {
 	
 	public List<PlaceObject> fetchAllPlaces();
 	
+	//TODO rename sites to places
 	public List<PlaceObject> fetchSitesByKeywords(String keywords);
-	
+
+	//TODO rename sites to places
 	public List<PlacesTransportObject> fetchSitesRelationsByKeywords(String keywords);
 }

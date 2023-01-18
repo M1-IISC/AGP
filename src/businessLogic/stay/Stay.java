@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import businessLogic.journeyPoint.Hotel;
+import businessLogic.journeyPoint.PeriodOfDay;
 
 public class Stay {
 	private Hotel beginPoint;
@@ -12,14 +13,22 @@ public class Stay {
 	
 	public double calculateConfort()
 	{
-		//TODO implementation
-		return 0;
+		double accumulator = beginPoint.getConfort();
+		double count = 1;
+		for (StayActivity stayActivity : activities) {
+			accumulator+=stayActivity.calculateConfort();
+			count++;
+		}
+		return accumulator / count;
 	}
 	
 	public double calculateCost()
 	{
-		//TODO implementation
-		return 0;
+		double accumulator = 0;
+		for (StayActivity stayActivity : activities) {
+			accumulator+=stayActivity.calculateCost();
+		}
+		return accumulator + beginPoint.calculateCost(PeriodOfDay.Afternoon);
 	}
 
 	public Hotel getBeginPoint() {

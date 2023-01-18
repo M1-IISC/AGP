@@ -16,7 +16,6 @@ class JdbcSqlResultSet implements BDeResultSet {
 	// Init result set
 	public JdbcSqlResultSet(ResultSet jdbcResultSet) {
 		this.jdbcResultSet = jdbcResultSet;
-		currentItem = null;
 		init();
 	}
 
@@ -26,8 +25,9 @@ class JdbcSqlResultSet implements BDeResultSet {
 		try {
 			jdbcResultSet.beforeFirst();
 		} catch (SQLException e) {
-			// TODO
 			System.err.println(e.getMessage());
+		} finally {
+			currentItem = null;
 		}
 	}
 
@@ -48,26 +48,13 @@ class JdbcSqlResultSet implements BDeResultSet {
 			
 			return true;
 		} catch (SQLException e) {
-			// TODO
+			currentItem = null;
 			return false;
 		}
 	}
 
 	@Override
 	public Map<String, Object> getCurrentItem() {
-		Map<String, Object> currentItem = new HashMap<>();
-		
-		try {
-			int columnCount = jdbcResultSet.getMetaData().getColumnCount();
-			for (int i = 1; i <= columnCount; i++) {
-				String columnName = jdbcResultSet.getMetaData().getColumnLabel(i);
-				Object columnData = jdbcResultSet.getObject(i);
-				currentItem.put(columnName, columnData);
-			}
-		} catch (SQLException e) {
-			return null;
-		}
-		
 		return currentItem;
 	}
 
