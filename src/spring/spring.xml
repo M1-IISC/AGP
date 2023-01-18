@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	
-	<bean id="TransportStrategy" class="businessLogic.transport.TransportStrategy" abstract="true"/>
+	<bean id="TransportStrategy" class="businessLogic.transport.TransportStrategy" abstract="true" scope="prototype"/>
 	<bean id="WalkStrategy" class="businessLogic.transport.WalkStrategy" parent="TransportStrategy">
 		<property name="speed">
 			<value>6</value>
@@ -43,29 +43,29 @@
 	</bean>
 	
 	
-	<bean id="IBDePersistence" class="persistence.IBDePersistence" abstract="true"/>
+	<bean id="IBDePersistence" class="persistence.IBDePersistence" abstract="true" scope="prototype"/>
 	<bean id="BDePersistence" class="persistence.BDePersistence" parent="IBDePersistence"/>
 	
-	<bean id="IStayBuilder" class="businessLogic.stay.builders.IStayBuilder" abstract="true"/>
+	<bean id="IStayBuilder" class="businessLogic.stay.builders.IStayBuilder" abstract="true" scope="prototype"/>
 	<bean id="StayBuilder" class="businessLogic.stay.builders.StayBuilder" parent="IStayBuilder"/>
 
-	<bean id="DataAccesObject" class="businessLogic.dataAccess.DataAccesObject" abstract="true"/>
+	<bean id="DataAccesObject" class="businessLogic.dataAccess.DataAccesObject" abstract="true" scope="prototype"/>
 	<bean id="DBDataAccesObject" class="businessLogic.dataAccess.DBDataAccesObject" parent="DataAccesObject">
 		<property name="persistanceLayerInterface" ref="BDePersistence"/>
 	</bean>	
 	
-	<bean id="JourneyPointFactory" class="businessLogic.journeyPoint.JourneyPointFactory" abstract="true"/>
+	<bean id="JourneyPointFactory" class="businessLogic.journeyPoint.JourneyPointFactory" abstract="true" scope="prototype"/>
 	<bean id="HotelFactory" class="businessLogic.journeyPoint.HotelFactory" parent="JourneyPointFactory"/>
 	<bean id="TouristicSiteFactory" class="businessLogic.journeyPoint.TouristicSiteFactory" parent="JourneyPointFactory"/>
 	
-	<bean id="ItineraryGraphBuilder" class="businessLogic.itinerary.ItineraryGraphBuilder" abstract="true"/>
+	<bean id="ItineraryGraphBuilder" class="businessLogic.itinerary.ItineraryGraphBuilder" abstract="true" scope="prototype"/>
 	<bean id="DBItineraryGraphBuilder" class="businessLogic.itinerary.DBItineraryGraphBuilder" parent="ItineraryGraphBuilder">
 		<property name="dataAccessor" ref="DBDataAccesObject"/>
 		<property name="hotelFactory" ref="HotelFactory"/>
 		<property name="touristicSiteFactory" ref="TouristicSiteFactory"/>
 	</bean>
 	
-	<bean id="IBusinessLogicController" class="businessLogic.IBusinessLogicController" abstract="true"/>
+	<bean id="IBusinessLogicController" class="businessLogic.IBusinessLogicController" abstract="true" scope="prototype"/>
 	<bean id="BusinessLogicController" class="businessLogic.BusinessLogicController" parent="IBusinessLogicController">
 		<property name="dataAccessor" ref="DBDataAccesObject"/>
 		<property name="hotelFactory" ref="HotelFactory"/>

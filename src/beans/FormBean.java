@@ -16,7 +16,7 @@ import spring.springContainer;
 @ManagedBean
 @SessionScoped
 public class FormBean {
-    private IBusinessLogicController iblc;
+    private IBusinessLogicController iblc = springContainer.getBeanOfClass(IBusinessLogicController.class);
     private List<Stay> stays;
     private int stayDuration = 7;
     private double minimumPrice = 1;
@@ -105,7 +105,7 @@ public class FormBean {
     
     
 	public String findStays() { 
-        //stays = iblc.searchPlansForAStay(stayDuration, minimumPrice, maximumPrice, profile, quality, keywords);
+        stays = iblc.searchPlansForAStay(stayDuration, minimumPrice, maximumPrice, profile, quality, keywords);
         return "resultOffers";
     }
 	

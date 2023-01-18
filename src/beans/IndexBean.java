@@ -12,7 +12,7 @@ import spring.springContainer;
 @SessionScoped
 public class IndexBean {
 	
-	private IBusinessLogicController controller;
+	private IBusinessLogicController controller = springContainer.getBeanOfClass(IBusinessLogicController.class);
 	private List<Hotel> hotels;
 
 	public IndexBean() { 
