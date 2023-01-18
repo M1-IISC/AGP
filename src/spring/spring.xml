@@ -18,13 +18,13 @@
 	</bean>
 	<bean id="BusStrategy" class="businessLogic.transport.BusStrategy" parent="TransportStrategy">
 		<property name="speed">
-			<value>30</value>
+			<value>50</value>
 		</property>
 		<property name="baseConfort">
 			<value>0.8</value>
 		</property>
 		<property name="confortOverDistance">
-			<value>-0.025</value>
+			<value>-0.0105</value>
 		</property>
 		<property name="cost">
 			<value>5</value>
@@ -32,10 +32,10 @@
 	</bean>
 	<bean id="BoatStrategy" class="businessLogic.transport.BoatStrategy" parent="TransportStrategy">
 		<property name="speed">
-			<value>60</value>
+			<value>10</value>
 		</property>
 		<property name="baseConfort">
-			<value>0.8</value>
+			<value>0.6</value>
 		</property>
 		<property name="cost">
 			<value>50</value>

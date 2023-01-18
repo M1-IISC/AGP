@@ -100,7 +100,12 @@ public class BusinessLogicTestCase {
 		Assert.notEmpty(businessLogicController.getAllActivitySites());
 		Assert.notEmpty(businessLogicController.getAllHistoricalSites());
 		Assert.notEmpty(businessLogicController.getAllHotels());
+<<<<<<< Updated upstream
 		Assert.notEmpty(businessLogicController.searchForTouristicSites(""));
 		Assert.notEmpty(businessLogicController.searchPlansForAStay(3,100,10000,StayProfile.Discovery,0.5,""));
+=======
+		Assert.notEmpty(businessLogicController.searchForTouristicSites("plage activitées"));
+		Assert.notEmpty(businessLogicController.searchPlansForAStay(3,100,10000,StayProfile.Discovery,0.6,"plage activitées"));
+>>>>>>> Stashed changes
 	}
 }
