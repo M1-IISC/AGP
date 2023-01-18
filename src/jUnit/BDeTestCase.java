@@ -41,6 +41,7 @@ public class BDeTestCase {
 	public void testAddText() throws IOException {
 		String key = "Site1";
 		String description = "Ceci est un test ! Il adore les plages";
+		
 		bdePersistence.addText(key, description);
 		
 		String filePath = seychellesSitesPath + System.getProperty("file.separator") + key + ".txt";
