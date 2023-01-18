@@ -1,12 +1,14 @@
 package businessLogic.stay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import businessLogic.journeyPoint.Hotel;
 
 public class Stay {
 	private Hotel beginPoint;
-	private List<StayActivity> activities;
+	private List<StayActivity> activities = new ArrayList<StayActivity>();
+	
 	
 	public double calculateConfort()
 	{

@@ -31,8 +31,9 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	double budget;
 	PeriodOfDay periodOfDay;
 	
-	public StayActivityBuilder(ItineraryGraph itineraryGraph) {
+	public StayActivityBuilder(ItineraryGraph itineraryGraph, double budget) {
 		this.itineraryGraph = itineraryGraph;
+		this.budget = budget;
 	}
 
 	@Override
@@ -147,7 +148,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		double routeTime = (transportTime + attractionTime) / MAX_TIME;
 		
 		// Impact the remaining activities to do
-		double numberOfActivity = 1 / MAX_ACTIVITIES;
+		double numberOfActivity = 1.0 / (double) MAX_ACTIVITIES;
 		
 		// Impact the comfort sensation
 		double transportTiredness = 1 - transport.calculateConfort(edge.getDistance());
@@ -217,7 +218,13 @@ public class StayActivityBuilder implements IStayActivityBuilder {
         while (!queue.isEmpty()) {
             Node currentNode = queue.remove();
             
+            /*
             if (currentNode.getPoint().getName().equals(point.getName())) {
+            	return currentNode;
+            }
+            */
+            
+            if (currentNode.getPoint().getAttractionTime() == 0) {
             	return currentNode;
             }
             
