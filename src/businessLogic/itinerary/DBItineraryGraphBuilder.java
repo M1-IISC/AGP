@@ -10,6 +10,10 @@ import businessLogic.dataAccess.PlaceObject;
 import businessLogic.dataAccess.PlacesTransportObject;
 import businessLogic.journeyPoint.JourneyPoint;
 import businessLogic.journeyPoint.JourneyPointFactory;
+import businessLogic.transport.BoatStrategy;
+import businessLogic.transport.BusStrategy;
+import businessLogic.transport.WalkStrategy;
+import spring.springContainer;
 
 public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 	
@@ -65,8 +69,20 @@ public class DBItineraryGraphBuilder implements ItineraryGraphBuilder {
 			PlaceObject placeB = placeRelation.getSiteB();
 			addUniqueNodeFromPlace(nodes, placeB);
 			
-			// TODO getTransportStrategyOfType without any duplicates
-			Edge edge = new Edge(null, placeRelation.getDistance(), nodes.get(placeB.getName()));
+			Edge edge = null;
+			switch (placeRelation.getType()) {
+			case BOAT:
+				edge = new Edge(springContainer.getBeanOfClass(BoatStrategy.class), placeRelation.getDistance(), nodes.get(placeB.getName()));
+				break;
+			case BUS:
+				edge = new Edge(springContainer.getBeanOfClass(BusStrategy.class), placeRelation.getDistance(), nodes.get(placeB.getName()));
+				break;
+			case WALK:
+				edge = new Edge(springContainer.getBeanOfClass(WalkStrategy.class), placeRelation.getDistance(), nodes.get(placeB.getName()));
+				break;
+			default:
+				break;
+			}		
 			
 			nodes.get(placeA.getName()).getEdges().add(edge);
 		}
