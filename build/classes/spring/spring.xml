@@ -4,43 +4,73 @@
        xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	
-	<bean id="TransportStrategy" class="businessLogic.transports.TransportStrategy" abstract="true"/>
-	<bean id="WalkStrategy" class="businessLogic.transports.WalkStrategy" parent="TransportStrategy">
+	<bean id="TransportStrategy" class="businessLogic.transport.TransportStrategy" abstract="true"/>
+	<bean id="WalkStrategy" class="businessLogic.transport.WalkStrategy" parent="TransportStrategy">
 		<property name="speed">
-			<value>4</value>
+			<value>6</value>
 		</property>
 		<property name="baseConfort">
 			<value>1</value>
 		</property>
 		<property name="confortOverDistance">
-			<value>-0.25</value>
+			<value>-0.16</value>
 		</property>
 	</bean>
-	<bean id="BusStrategy" class="businessLogic.transports.BusStrategy" parent="TransportStrategy">
+	<bean id="BusStrategy" class="businessLogic.transport.BusStrategy" parent="TransportStrategy">
 		<property name="speed">
 			<value>30</value>
 		</property>
 		<property name="baseConfort">
-			<value>4/5</value>
+			<value>0.8</value>
 		</property>
 		<property name="confortOverDistance">
-			<value>-1 * (1/30) * (4/5)</value>
+			<value>-0.025</value>
 		</property>
 		<property name="cost">
 			<value>5</value>
 		</property>
 	</bean>
-	<bean id="BusStrategy" class="businessLogic.transports.BoatStrategy" parent="TransportStrategy">
+	<bean id="BoatStrategy" class="businessLogic.transport.BoatStrategy" parent="TransportStrategy">
 		<property name="speed">
 			<value>60</value>
 		</property>
 		<property name="baseConfort">
-			<value>4/5</value>
+			<value>0.8</value>
 		</property>
 		<property name="cost">
 			<value>50</value>
 		</property>
 	</bean>
+	
+	
+	<bean id="IBDePersistence" class="persistence.IBDePersistence" abstract="true"/>
+	<bean id="BDePersistence" class="persistence.BDePersistence" parent="IBDePersistence"/>
+	
+	<bean id="IStayBuilder" class="businessLogic.stay.builders.IStayBuilder" abstract="true"/>
+	<bean id="StayBuilder" class="businessLogic.stay.builders.StayBuilder" parent="IStayBuilder"/>
 
-	<bean id="DataAccesObject" class="businessLogic.persistance.DataAccesObject" abstract="true"/>
+	<bean id="DataAccesObject" class="businessLogic.dataAccess.DataAccesObject" abstract="true"/>
+	<bean id="DBDataAccesObject" class="businessLogic.dataAccess.DBDataAccesObject" parent="DataAccesObject">
+		<property name="persistanceLayerInterface" ref="BDePersistence"/>
+	</bean>	
+	
+	<bean id="JourneyPointFactory" class="businessLogic.journeyPoint.JourneyPointFactory" abstract="true"/>
+	<bean id="HotelFactory" class="businessLogic.journeyPoint.HotelFactory" parent="JourneyPointFactory"/>
+	<bean id="TouristicSiteFactory" class="businessLogic.journeyPoint.TouristicSiteFactory" parent="JourneyPointFactory"/>
+	
+	<bean id="ItineraryGraphBuilder" class="businessLogic.itinerary.ItineraryGraphBuilder" abstract="true"/>
+	<bean id="DBItineraryGraphBuilder" class="businessLogic.itinerary.DBItineraryGraphBuilder" parent="ItineraryGraphBuilder">
+		<property name="dataAccessor" ref="DBDataAccesObject"/>
+		<property name="hotelFactory" ref="HotelFactory"/>
+		<property name="touristicSiteFactory" ref="TouristicSiteFactory"/>
+	</bean>
+	
+	<bean id="IBusinessLogicController" class="businessLogic.IBusinessLogicController" abstract="true"/>
+	<bean id="BusinessLogicController" class="businessLogic.BusinessLogicController" parent="IBusinessLogicController">
+		<property name="dataAccessor" ref="DBDataAccesObject"/>
+		<property name="hotelFactory" ref="HotelFactory"/>
+		<property name="touristicSiteFactory" ref="TouristicSiteFactory"/>
+		<property name="graphBuilder" ref="DBItineraryGraphBuilder"/>
+	</bean>
+	
 </beans>

@@ -1,8 +1,14 @@
-package businessLogic.transports;
+package businessLogic.transport;
 
 public class BusStrategy extends TransportStrategy {
 	private double confortOverDistance;
 	private double cost;
+	
+	public BusStrategy() {
+		super();
+		confortOverDistance = 0;
+		cost = 0;
+	}
 
 	public BusStrategy(double speed, double baseConfort, double confortOverDistance, double cost) {
 		super(speed, baseConfort);
@@ -28,7 +34,8 @@ public class BusStrategy extends TransportStrategy {
 
 	@Override
 	public double calculateConfort(double distance) {
-		return getBaseConfort() + confortOverDistance * distance;
+		double conf = getBaseConfort() + confortOverDistance * distance;
+		return conf > 0 ? conf : 0;
 	}
 
 	@Override
@@ -43,6 +50,6 @@ public class BusStrategy extends TransportStrategy {
 
 	@Override
 	public TransportType getType() {
-		return TransportType.Bus;
+		return TransportType.BUS;
 	}
 }

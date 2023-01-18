@@ -1,4 +1,4 @@
-package businessLogic.itinaryGraph;
+package businessLogic.itinerary;
 
 public class ItineraryGraph {
 	private Node head;

@@ -1,4 +1,4 @@
-package businessLogic.persistance;
+package businessLogic.dataAccess;
 
 import businessLogic.journeyPoint.CategoryOfSite;
 
@@ -83,7 +83,7 @@ public class PlaceObject {
 		this.lunchCost = lunchCost;
 	}
 
-	public double getNightcost() {
+	public double getNightCost() {
 		return nightcost;
 	}
 

@@ -1,9 +1,15 @@
-package businessLogic.transports;
+package businessLogic.transport;
 
 public abstract class TransportStrategy {
 	private double speed;
 	private double baseConfort;
 	
+	public TransportStrategy() {
+		super();
+		speed = 0;
+		baseConfort = 0;
+	}
+
 	protected TransportStrategy(double speed, double baseConfort) {
 		super();
 		this.speed = speed;
