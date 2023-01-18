@@ -122,7 +122,7 @@ public class BDePersistence implements IBDePersistence {
 		String combinedQueryRegex = "^(.*?(\\bwith\\b)[^$]*)$";
 		String tableNameRegex = "^(.*?(\\b" + tableName + "\\b)[^$]*)$";
 		String selectRegex = "^(.*?(\\bselect\\b)[^$]*)$";
-		String withRegex = "with";
+		String withRegex = " with ";
 		
 		// If query is not a SELECT query, aborting
 		if (!Pattern.compile(selectRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {

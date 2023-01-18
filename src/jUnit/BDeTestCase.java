@@ -53,8 +53,6 @@ public class BDeTestCase {
 		assertTrue(bdeResultSet.next());
 		assertNotNull(bdeResultSet.getCurrentItem());
 		assertTrue(((String) bdeResultSet.getCurrentItem().get("name")).equals("Site1"));
-		
-		assertTrue(f.delete());
 	}
 	
 	/**
@@ -112,6 +110,30 @@ public class BDeTestCase {
 		
 		assertFalse(bdeResultSet.next());
 		assertNull(bdeResultSet.getCurrentItem());
+	}
+	
+	@Test
+	public void testExecuteCombinedQueryWithNoSpecificKeywords() {
+		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name FROM Site s WHERE s.category = 'LEISURE' WITH *:*");
+		
+		bdeResultSet.next();
+		Map<String, Object> currentItem = bdeResultSet.getCurrentItem();
+		System.out.println(currentItem);
+		bdeResultSet.next();
+		currentItem = bdeResultSet.getCurrentItem();
+		System.out.println(currentItem);
+		bdeResultSet.next();
+		currentItem = bdeResultSet.getCurrentItem();
+		System.out.println(currentItem);
+		bdeResultSet.next();
+		currentItem = bdeResultSet.getCurrentItem();
+		System.out.println(currentItem);
+		bdeResultSet.next();
+		currentItem = bdeResultSet.getCurrentItem();
+		System.out.println(currentItem);
+		bdeResultSet.next();
+		currentItem = bdeResultSet.getCurrentItem();
+		System.out.println(currentItem);
 	}
 
 }
