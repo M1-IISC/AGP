@@ -3,6 +3,11 @@ package persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * 
+ * This singleton represents the SQL connection for Jdbc
+ *
+ */
 class JdbcConnection {
 	
 	private static String host = "localhost";
@@ -19,7 +24,8 @@ class JdbcConnection {
 				DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 				connection = DriverManager.getConnection(url, user, password);
 			} catch (Exception e) {
-				System.err.println("Connection failed : " + e.getMessage());
+				System.err.println("Connection to database failed : " + e.getMessage());
+				System.exit(1);
 			}
 		}
 		return connection;

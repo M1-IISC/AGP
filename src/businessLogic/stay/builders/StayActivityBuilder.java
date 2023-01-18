@@ -29,16 +29,19 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	
 	ItineraryGraph itineraryGraph;
 	double budget;
+	double remainingTime;
 	PeriodOfDay periodOfDay;
 	
-	public StayActivityBuilder(ItineraryGraph itineraryGraph) {
+	public StayActivityBuilder(ItineraryGraph itineraryGraph, double budget) {
 		this.itineraryGraph = itineraryGraph;
+		this.budget = budget;
 	}
 
 	@Override
 	public StayActivity build(Hotel startingPoint, Hotel arrivalPoint, PeriodOfDay periodOfDay, StayActivityType type) {
 		
 		this.periodOfDay = periodOfDay; 
+		this.remainingTime = MAX_TIME;
 		
 		StayActivity activity = null;
 		
@@ -65,11 +68,10 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	private List<Route> findBestItinerary(Hotel startingPoint) {		
 		// Initialization
 		double remainingActivities = 1;
-		double remainingTime = 1;
 		double remainingBudget = 1;
 		double tiredness = 0;
 		
-		double initialF = remainingActivities + remainingTime + remainingBudget + tiredness;
+		double initialF = remainingActivities + remainingBudget + tiredness;
 		
 		Set<Edge> open = new HashSet<>();
 		Set<Edge> closed = new HashSet<>();
@@ -80,7 +82,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		Node startingNode = findPointInGraph(startingPoint);
 		List<Edge> edges = findAvailableEdges(startingPoint, startingNode);
 		for (Edge edge : edges) {
-			double F = initialF - calculateF(startingPoint, edge);
+			double F = initialF - calculateF(startingPoint, edge, initialF);
 			open.add(edge);
 			edge.setScore(F);
 			edge.setPrevious(null);
@@ -92,7 +94,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			open.remove(currentEdge);
 			closed.add(currentEdge);
 			
-			if (currentEdge.getDestination().getPoint().getName() == startingPoint.getName() ) {
+			if (currentEdge.getDestination().getPoint().getName().equals(startingPoint.getName())) {
 				// STOP THE ALGO
 				break;
 			}
@@ -100,7 +102,8 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			// Check all attractions around the current node
 			edges = findAvailableEdges(startingPoint, currentEdge.getDestination());
 			for (Edge edge : edges) {
-				double F = calculateF(startingPoint, edge);
+				double F = calculateF(startingPoint, edge, currentEdge.getScore());
+				if (F == -1) { continue; }
 				F = currentEdge.getScore() - F;
 				if (!closed.contains(edge)) {
 					if (open.contains(edge)) {
@@ -129,7 +132,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		return routes;
 	}	
 	
-	private double calculateF(Hotel startingPoint, Edge edge) {
+	private double calculateF(Hotel startingPoint, Edge edge, double currentF) {
 		
 		TransportStrategy transport = edge.getStrategy();
 		JourneyPoint attraction = edge.getDestination().getPoint();
@@ -147,7 +150,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		double routeTime = (transportTime + attractionTime) / MAX_TIME;
 		
 		// Impact the remaining activities to do
-		double numberOfActivity = 1 / MAX_ACTIVITIES;
+		double numberOfActivity = 1.0 / (double) MAX_ACTIVITIES;
 		
 		// Impact the comfort sensation
 		double transportTiredness = 1 - transport.calculateConfort(edge.getDistance());
@@ -157,9 +160,9 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		
 		
 		// Add the minimal cost of the return route to the hotel
-		double Hmin = Double.MAX_VALUE;
+		double Hmin = 10;
 		for (Edge returnRoute : edge.getDestination().getEdges()) {
-			if (returnRoute.getDestination().getPoint().getName() == startingPoint.getName()) {
+			if (returnRoute.getDestination().getPoint().getName().equals(startingPoint.getName())) {
 				double returnTime = returnRoute.getStrategy().calculateTime(returnRoute.getDistance());
 				double returnPrice = returnRoute.getStrategy().calculatePrice(returnRoute.getDistance());		
 				double H = (returnTime / MAX_TIME) + (returnPrice / budget);
@@ -169,7 +172,13 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			}
 		}
 		
-		return routeCost + routeTime + numberOfActivity + routeTiredness + Hmin;
+		double score = routeCost + numberOfActivity + routeTiredness;
+		
+		if (currentF - score < 0) {
+			return -1;
+		}
+		
+		return score;
 	}
 
 	private List<Edge> findAvailableEdges(Hotel startingPoint, Node node) {
@@ -181,7 +190,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 				// It's an attraction
 				routes.add(e);
 			}
-			if (e.getDestination().getPoint().getName() == startingPoint.getName()) {
+			if (e.getDestination().getPoint().getName().equals(startingPoint.getName())) {
 				// It's the starting point (the hotel)
 				routes.add(e);
 			}
@@ -217,7 +226,13 @@ public class StayActivityBuilder implements IStayActivityBuilder {
         while (!queue.isEmpty()) {
             Node currentNode = queue.remove();
             
+            /*
             if (currentNode.getPoint().getName().equals(point.getName())) {
+            	return currentNode;
+            }
+            */
+            
+            if (currentNode.getPoint().getAttractionTime() == 0) {
             	return currentNode;
             }
             

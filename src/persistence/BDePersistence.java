@@ -29,7 +29,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
 public class BDePersistence implements IBDePersistence {
-	
+
 	private Analyzer analyseur = new StandardAnalyzer();
 	
 	private String tableName, keyName, repositoryPath, indexPath;
@@ -44,25 +44,29 @@ public class BDePersistence implements IBDePersistence {
 
 	@Override
 	public void createTextIndex() {
-	    Directory index;
 		try {
-			index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
+			// Get text index directory with the index path
+			Directory index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
 			
+			// If index already exists, abort creating text index (avoiding index duplicates)
 			if (DirectoryReader.indexExists(index)) {
 				return;
 			}
 			
+			// Creating the index writer
 			IndexWriterConfig config = new IndexWriterConfig(analyseur);
-			IndexWriter w = new IndexWriter(index, config);
+			IndexWriter indexWriter = new IndexWriter(index, config);
 			
+			// For each files into the repository path, adding these files to the text index
 			for (File f : new File(repositoryPath).listFiles()) {
 			   	Document doc = new Document();
 			   	doc.add(new TextField("name", FilenameUtils.removeExtension(f.getName()), Field.Store.YES));
 			   	doc.add(new TextField("content", new FileReader(f)));
-			   	w.addDocument(doc);
+			   	indexWriter.addDocument(doc);
 		    }
-		   		
-		   	w.close();
+		   	
+			// Closing the index writer
+		   	indexWriter.close();
 		} catch (IOException e) {
 			// TODO
 			System.err.println(e.getMessage());
@@ -71,55 +75,120 @@ public class BDePersistence implements IBDePersistence {
 
 	@Override
 	public void addText(String key, String text) {
-		// TODO Auto-generated method stub
-		
+		// Creating new file in the repository named by the key string
+		File f = new File(repositoryPath + System.getProperty("file.separator") + key + ".txt");
+		try {
+			// If file is successfully created
+			if (f.createNewFile()) {
+				// Create new file writer
+				FileWriter fileWriter = new FileWriter(f);
+				
+				// Write text into the file
+				fileWriter.write(text);
+				
+				// Close the writer
+				fileWriter.close();
+				
+				// Get text index directory with the index path
+				Directory index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
+				
+				// If index doesn't already exists, abort adding text to the text index
+				if (!DirectoryReader.indexExists(index)) {
+					return;
+				}
+				
+				// Creating the index writer
+				IndexWriterConfig config = new IndexWriterConfig(analyseur);
+				IndexWriter indexWriter = new IndexWriter(index, config);
+				
+				Document doc = new Document();
+			   	doc.add(new TextField("name", FilenameUtils.removeExtension(f.getName()), Field.Store.YES));
+			   	doc.add(new TextField("content", new FileReader(f)));
+			   	indexWriter.addDocument(doc);
+			   	
+			   	// Closing the index writer
+			   	indexWriter.close();
+			}
+		} catch (IOException e) {
+			// TODO
+			f.delete();
+			System.err.println(e.getMessage());
+		}
 	}
 
 	@Override
 	public BDeResultSet executeQuery(String query) {
+		// Defining regexs
 		String combinedQueryRegex = "^(.*?(\\bwith\\b)[^$]*)$";
 		String tableNameRegex = "^(.*?(\\b" + tableName + "\\b)[^$]*)$";
 		String selectRegex = "^(.*?(\\bselect\\b)[^$]*)$";
+		String withRegex = " with ";
 		
+		// If query is not a SELECT query, aborting
 		if (!Pattern.compile(selectRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {
+			System.err.println("This query is not a SELECT query");
 			return null;
 		}
 		
+		// Verifying which type this query is, combined or SQL
 		if (Pattern.compile(combinedQueryRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {
+			// Combined query
+			
+			// Verifying that combined query contains the table associated to the text index
 			if (!Pattern.compile(tableNameRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).matcher(query).matches()) {
 				System.err.println("The table " + tableName + " has no text index");
 				return null;
 			}
 			
-			String[] queries = Pattern.compile("[,&]|with", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).split(query);
+			// Separating combined query into on SQL query and one Text query
+			String[] queries = Pattern.compile(withRegex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE).split(query);
 			String sqlQuery = queries[0];
 			String textQuery = queries[1];
 			
+			// Verifying that splitting has been correctly done
 			// TODO exception if queries length is not equals to 2 & if 0 and 1 is null
 			if (queries.length != 2 || sqlQuery.length() == 0 || textQuery.length() == 0) {
 				System.err.println("Error when interpretting combined query");
 				return null;
 			}
 			
+			// Executing the two queries
 			JdbcSqlResultSet sqlResultSet = executeSqlQuery(sqlQuery);
 			LuceneTextResultSet textResultSet = executeTextQuery(textQuery);
 			
+			// Combine queries
 			return combineQuery(sqlResultSet, textResultSet);
 		} else {
+			// SQL query
+			
+			// Executing SQL query
 			return executeSqlQuery(query);
 		}
 	}
 	
+	/**
+	 * This method is used to combine the two SQL & Text queries into one.
+	 * @param sqlResultSet The SQL result set iterator
+	 * @param textResultSet The Text result set iterator
+	 * @return The combined result set iterator containing the two queries results
+	 */
 	private BDeFirstPlanResultSet combineQuery(JdbcSqlResultSet sqlResultSet, LuceneTextResultSet textResultSet) {
 		BDeFirstPlanResultSet firstPlanResultSet = new BDeFirstPlanResultSet(sqlResultSet, textResultSet, keyName);
 		return firstPlanResultSet;
 	}
 	
+	/**
+	 * This method is used to execute the SQL query.
+	 * @param sqlQuery The SQL query
+	 * @return The SQL result set iterator containing the SQL query results
+	 */
 	private JdbcSqlResultSet executeSqlQuery(String sqlQuery) {
+		// Executing query with JDBC and putting the JDBC result set into the final result set
 		try {
 			Statement statement = JdbcConnection.getConnection().createStatement();
 			ResultSet resultSet = statement.executeQuery(sqlQuery);
 			
+			// Creating the result set
 			JdbcSqlResultSet sqlResultSet = new JdbcSqlResultSet(resultSet);
 			return sqlResultSet;
 		} catch (SQLException e) {
@@ -129,26 +198,38 @@ public class BDePersistence implements IBDePersistence {
 		}
 	}
 	
+	/**
+	 * This method is used to execute the Text query.
+	 * @param sqlQuery The Text query
+	 * @return The Text result set iterator containing the Text query results
+	 */
 	private LuceneTextResultSet executeTextQuery(String textQuery) {
+		// Creating list of results
 		List<Map<String, Object>> results = new ArrayList<>();
 		
 	    Directory index;
 		try {
+			// Get text index directory with the index path
 			index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
+			
+			// Creating the index reader
 			DirectoryReader ireader = DirectoryReader.open(index);
 		    IndexSearcher searcher = new IndexSearcher(ireader);
-		    	
+		    
+		    // Parsing text query into Lucene text query
 		    QueryParser qp = new QueryParser("content", analyseur); 
 		    Query req = qp.parse(textQuery);
-
+		    
+		    // Gathering results (max 100)
 		    TopDocs luceneResults = searcher.search(req, 100);
 		    
+		    // We add reach result into the results list 
 		    for (int i = 0; i < luceneResults.scoreDocs.length; i++) {
 		    	int docId = luceneResults.scoreDocs[i].doc;
 		    	float docScore = luceneResults.scoreDocs[i].score;
 		    	Document d = searcher.doc(docId);
 		    	
-		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + "/" + d.get("name") + ".txt")));
+		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + System.getProperty("file.separator") + d.get("name") + ".txt")));
 		    	
 		    	Map<String, Object> result = new HashMap<>();
 		    	result.put(keyName, d.get("name"));
@@ -158,8 +239,10 @@ public class BDePersistence implements IBDePersistence {
 		    	results.add(result);
 		    }
 		    
+		    // Closing the index reader
 		    ireader.close();
 		    
+		    // Creating the result set
 		    LuceneTextResultSet textResultSet = new LuceneTextResultSet(results);
 			return textResultSet;
 		} catch (IOException e) {
@@ -171,6 +254,22 @@ public class BDePersistence implements IBDePersistence {
 			System.err.println(e.getMessage());
 			return null;
 		}
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public String getRepositoryPath() {
+		return repositoryPath;
+	}
+
+	public String getIndexPath() {
+		return indexPath;
 	}
 
 }

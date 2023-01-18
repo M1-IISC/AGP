@@ -13,7 +13,6 @@ import businessLogic.stay.builders.IStayBuilder;
 import businessLogic.stay.builders.StayBuilder;
 import businessLogic.dataAccess.DataAccesObject;
 import businessLogic.dataAccess.PlaceObject;
-import businessLogic.itinerary.DBItineraryGraphBuilder;
 import businessLogic.itinerary.ItineraryGraph;
 import businessLogic.itinerary.ItineraryGraphBuilder;
 
