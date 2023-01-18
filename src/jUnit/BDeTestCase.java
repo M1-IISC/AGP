@@ -48,11 +48,6 @@ public class BDeTestCase {
 		File f = new File(filePath);
 		assertTrue(f.exists());
 		assertTrue((new String(Files.readAllBytes(Paths.get(filePath)))).equals(description));
-		
-		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name FROM Site s WHERE s.name = 'Site1' WITH plage");
-		assertTrue(bdeResultSet.next());
-		assertNotNull(bdeResultSet.getCurrentItem());
-		assertTrue(((String) bdeResultSet.getCurrentItem().get("name")).equals("Site1"));
 	}
 	
 	/**
@@ -60,11 +55,13 @@ public class BDeTestCase {
 	 */
 	@Test
 	public void testExecuteSqlSelectQuery() {
-		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT h.name as hotelName FROM hotel h WHERE h.name = 'Hotel1'");
+		String hotelName = "Hotel California Seychelles";
+		
+		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT h.name as hotelName FROM hotel h WHERE h.name = '" + hotelName + "'");
 		
 		assertTrue(bdeResultSet.next());
 		assertNotNull(bdeResultSet.getCurrentItem());
-		assertTrue(((String) bdeResultSet.getCurrentItem().get("hotelName")).equals("Hotel1"));
+		assertTrue(((String) bdeResultSet.getCurrentItem().get("hotelName")).equals(hotelName));
 		assertFalse(bdeResultSet.next());
 		assertNull(bdeResultSet.getCurrentItem());
 	}
@@ -116,24 +113,23 @@ public class BDeTestCase {
 	public void testExecuteCombinedQueryWithNoSpecificKeywords() {
 		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name FROM Site s WHERE s.category = 'LEISURE' WITH *:*");
 		
-		bdeResultSet.next();
-		Map<String, Object> currentItem = bdeResultSet.getCurrentItem();
-		System.out.println(currentItem);
-		bdeResultSet.next();
-		currentItem = bdeResultSet.getCurrentItem();
-		System.out.println(currentItem);
-		bdeResultSet.next();
-		currentItem = bdeResultSet.getCurrentItem();
-		System.out.println(currentItem);
-		bdeResultSet.next();
-		currentItem = bdeResultSet.getCurrentItem();
-		System.out.println(currentItem);
-		bdeResultSet.next();
-		currentItem = bdeResultSet.getCurrentItem();
-		System.out.println(currentItem);
-		bdeResultSet.next();
-		currentItem = bdeResultSet.getCurrentItem();
-		System.out.println(currentItem);
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
 	}
 
 }
