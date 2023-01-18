@@ -43,8 +43,8 @@ public class DBDataAccesObject implements DataAccesObject {
 					getValue((Float)line.get("comfort")),
 					0,
 					0,
-					getValue((Float)line.get("night_price")),
 					getValue((Float)line.get("lunch_price")),
+					getValue((Float)line.get("night_price")),
 					getSiteValue(line.get("category")),
 					1
 					));
@@ -117,10 +117,11 @@ public class DBDataAccesObject implements DataAccesObject {
 	public List<PlaceObject> fetchSitesByKeywords(String keywords) {
 		LinkedList<PlaceObject> placeObjectList = new LinkedList<PlaceObject>();
 		
-		//TODO add keywords
-		String querry = String.format("SELECT p.name as name, p.comfort, h.night_price, h.lunch_price, s.price, s.duration, s.category\r\n"
-				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name with %s;\n", keywords);
+		//TODO fix lucene
 		
+		//TODO add keywords
+		String querry = String.format("SELECT p.name, p.comfort, h.night_price, h.lunch_price, s.price, s.duration, s.category "
+				+ "FROM place p Left outer JOIN hotel h ON p.name = h.name left outer JOIN site s ON p.name = s.name %s %s", keywords.isEmpty() ? "":"WITH", keywords);
 		BDeResultSet resultSet = persistanceLayerInterface.executeQuery(querry);
 		//TODO iterator->next when it work
 		resultSet.init();
@@ -134,8 +135,8 @@ public class DBDataAccesObject implements DataAccesObject {
 					getValue((Float)line.get("comfort")),
 					getValue((Float)line.get("duration")),
 					getValue((Float)line.get("price")),
-					getValue((Float)line.get("night_price")),
 					getValue((Float)line.get("lunch_price")),
+					getValue((Float)line.get("night_price")),
 					getSiteValue(line.get("category")),
 					getValue((Float)line.get("score"))
 					));
@@ -167,24 +168,24 @@ public class DBDataAccesObject implements DataAccesObject {
 					//place source
 					new PlaceObject(
 							(String)line.get("startName"),
-							null ,
+							line.get("startCost") == null? null : "" ,
 							getValue((Float)line.get("startComfort")),
 							getValue((Float)line.get("startDuration")),
 							getValue((Float)line.get("startCost")),
-							getValue((Float)line.get("startNightPrice")),
 							getValue((Float)line.get("startLunchPrice")),
+							getValue((Float)line.get("startNightPrice")),
 							getSiteValue(line.get("startCat")),
 							1
 							),
 					//place destination
 					new PlaceObject(
 							(String)line.get("endName"),
-							null ,
+							line.get("endCost") == null? null : "" ,
 							getValue((Float)line.get("endComfort")),
 							getValue((Float)line.get("endDuration")),
 							getValue((Float)line.get("endCost")),
-							getValue((Float)line.get("endNightPrice")),
 							getValue((Float)line.get("endLunchPrice")),
+							getValue((Float)line.get("endNightPrice")),
 							getSiteValue(line.get("endCat")),
 							1
 							),
@@ -194,7 +195,10 @@ public class DBDataAccesObject implements DataAccesObject {
 					);
 		}
 		
+		if (keywords==null||keywords.isEmpty()) return placesTransportObjectList;
+		
 		querry = String.format("Select name from site with %s", keywords);
+		resultSet = persistanceLayerInterface.executeQuery(querry);
 		while (resultSet.next())
 		{
 			Map<String, Object> line = resultSet.getCurrentItem();
