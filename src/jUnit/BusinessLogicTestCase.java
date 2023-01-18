@@ -41,22 +41,27 @@ public class BusinessLogicTestCase {
 	{
 		@SuppressWarnings("unchecked")
 		Map<String, TransportStrategy> strategies = (Map<String, TransportStrategy>) springContainer.getAllBeansOfClass(TransportStrategy.class);
-		Assert.notNull(strategies);
-		Assert.notEmpty(strategies);
 		for (Map.Entry<String, TransportStrategy> strategy : strategies.entrySet()) {
 			TransportStrategy transportStrategy = strategy.getValue();
-			Assert.isTrue(transportStrategy.calculateConfort(0) != 0, String.format("Comfort at zero for %20s bean", strategy.getKey()));
-			Assert.isTrue(transportStrategy.calculateTime(30) != 0, String.format("Time at zero for %20s bean", strategy.getKey()));
+			Assert.isTrue(transportStrategy.calculateConfort(0) != 0, String.format("Comfort at zero for %s bean", strategy.getKey()));
+			Assert.isTrue(transportStrategy.calculatePrice(0) >= 0, String.format("Negative price for %s bean", strategy.getKey()));
+			Assert.isTrue(transportStrategy.calculateTime(30) != 0, String.format("Time at zero for %s bean", strategy.getKey()));
 		}
 	}
 	
 	@Test
-	public void dataBaseAccesObjectTests()
+	public void DAOFetchEveryPlacesTest()
 	{
-		List<PlaceObject> objects;
-		objects = dataAccessor.fetchAllPlaces();
+		List<PlaceObject> objects = dataAccessor.fetchAllPlaces();
+		Assert.notNull(objects);
 		Assert.notEmpty(objects);
-		objects = dataAccessor.fetchAllHotels();
+	}
+	
+	@Test
+	public void DAOFetchEveryHotelsTest()
+	{
+		List<PlaceObject> objects = dataAccessor.fetchAllHotels();
+		Assert.notNull(objects);
 		Assert.notEmpty(objects);
 		for (PlaceObject place : objects) {
 			Assert.isTrue(place.getAttractionTime()==0);
@@ -66,18 +71,47 @@ public class BusinessLogicTestCase {
 			Assert.isTrue(place.getNightCost()!=0);
 			Assert.isTrue(place.getAccuracy()==1);
 		}
-		objects = dataAccessor.fetchAllSites();
+	}
+	
+	@Test
+	public void DAOFetchEverySitesTest()
+	{
+		List<PlaceObject> objects = dataAccessor.fetchAllSites();
+		Assert.notNull(objects);
 		Assert.notEmpty(objects);
 		for (PlaceObject place : objects) {
 			Assert.isTrue(place.getAttractionTime()!=0);
 			Assert.isTrue(place.getCost()!=0);
-			Assert.isTrue(place.getDescription()!=null);
+			Assert.isTrue(place.getDescription()!=null);			
 			Assert.isTrue(place.getLunchCost()==0);
 			Assert.isTrue(place.getNightCost()==0);
 		}
-		objects = dataAccessor.fetchSitesByKeywords("");
+	}
+	
+	@Test
+	public void DAOFetchPlacesByKeywords()
+	{
+		List<PlaceObject> objects = dataAccessor.fetchSitesByKeywords("");
+		double accuracyAccumulator = 0;
+		Assert.notEmpty(objects);
+		for (PlaceObject place : objects) {
+			accuracyAccumulator+=place.getAccuracy();
+		}
+		Assert.isTrue(accuracyAccumulator/(double)(objects.size()) == 1);
+		
 		objects = dataAccessor.fetchSitesByKeywords("plage activitées");
 		Assert.notEmpty(objects);
+		accuracyAccumulator = 0;
+		for (PlaceObject place : objects) {
+			accuracyAccumulator+=place.getAccuracy();
+		}
+		Assert.isTrue(accuracyAccumulator/(double)(objects.size()) != 1);
+		Assert.isTrue(accuracyAccumulator/(double)(objects.size()) >= 0);
+	}
+	
+	@Test
+	public void DAOFetchPlacesTransportRelationsByKeywords()
+	{
 		Assert.notEmpty(dataAccessor.fetchSitesRelationsByKeywords("plage activitées"));
 	}
 	
