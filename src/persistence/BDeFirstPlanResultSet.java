@@ -26,7 +26,10 @@ class BDeFirstPlanResultSet implements BDeResultSet {
 
 	@Override
 	public boolean next() {
-		if (!sqlResultSet.next()) return false;
+		if (!sqlResultSet.next()) {
+			currentResult = null;
+			return false;
+		}
 		
 		Map<String, Object> sqlResult = sqlResultSet.getCurrentItem();
 		String sqlKey = (String) sqlResult.get(keyName);

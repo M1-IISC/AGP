@@ -57,8 +57,8 @@ public class BDePersistence implements IBDePersistence {
 			
 			for (File f : new File(repositoryPath).listFiles()) {
 			   	Document doc = new Document();
-			   	doc.add(new Field("name", FilenameUtils.removeExtension(f.getName()), TextField.TYPE_STORED));
-			   	doc.add(new Field("content", new FileReader(f), TextField.TYPE_NOT_STORED));
+			   	doc.add(new TextField("name", FilenameUtils.removeExtension(f.getName()), Field.Store.YES));
+			   	doc.add(new TextField("content", new FileReader(f)));
 			   	w.addDocument(doc);
 		    }
 		   		
@@ -148,9 +148,11 @@ public class BDePersistence implements IBDePersistence {
 		    	float docScore = luceneResults.scoreDocs[i].score;
 		    	Document d = searcher.doc(docId);
 		    	
+		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + "/" + d.get("name") + ".txt")));
+		    	
 		    	Map<String, Object> result = new HashMap<>();
 		    	result.put(keyName, d.get("name"));
-		    	result.put("description", d.get("content"));
+		    	result.put("description", description);
 		    	result.put("score", docScore);
 		    	
 		    	results.add(result);

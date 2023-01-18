@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,8 +60,29 @@ public class BDeTestCase {
 		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name FROM Site s WHERE s.category = 'LEISURE' WITH plage");
 		
 		assertTrue(bdeResultSet.next());
+		Map<String, Object> currentItem = bdeResultSet.getCurrentItem();
+		assertNotNull(currentItem);
+		assertTrue(currentItem.containsKey("name") && !((String) currentItem.get("name")).isEmpty());
+		assertTrue(currentItem.containsKey("score") && (float) currentItem.get("score") != 0);
+		assertTrue(currentItem.containsKey("description") && !((String) currentItem.get("description")).isEmpty());
+		
+		assertTrue(bdeResultSet.next());
 		assertNotNull(bdeResultSet.getCurrentItem());
-		System.out.println(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertTrue(bdeResultSet.next());
+		assertNotNull(bdeResultSet.getCurrentItem());
+		
+		assertFalse(bdeResultSet.next());
+		assertNull(bdeResultSet.getCurrentItem());
 	}
 
 }
