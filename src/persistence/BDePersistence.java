@@ -39,7 +39,7 @@ public class BDePersistence implements IBDePersistence {
 		this.tableName = tableName;
 		this.keyName = keyName;
 		this.repositoryPath = repositoryPath;
-		this.indexPath = Paths.get(repositoryPath).getParent().toString() + "/index";
+		this.indexPath = Paths.get(repositoryPath).getParent().toString() + System.getProperty("file.separator") + "index";
 	}
 
 	@Override

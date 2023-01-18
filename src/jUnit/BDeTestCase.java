@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.junit.Before;
@@ -24,7 +25,8 @@ public class BDeTestCase {
 	@Before
 	public void prepare() {
 		bdePersistence = new BDePersistence();
-		bdePersistence.configure("site", "name", "H:\\Desktop\\repository");
+		String seychellesSitesPath = System.getProperty("user.dir") + System.getProperty("file.separator") + "seychelles_sites";
+		bdePersistence.configure("site", "name", seychellesSitesPath);
 		bdePersistence.createTextIndex();
 	}
 	
