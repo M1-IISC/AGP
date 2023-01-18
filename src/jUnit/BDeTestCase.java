@@ -21,7 +21,7 @@ import persistence.IBDePersistence;
 public class BDeTestCase {
 	
 	private IBDePersistence bdePersistence;
-	String seychellesSitesPath = System.getProperty("user.dir") + System.getProperty("file.separator") + "seychelles_sites";
+	String seychellesSitesPath = System.getenv().get("SEYCHELLES_SITES_PATH");
 	
 	/**
 	 * This method is executed before each test of this test case to configure the BDe API
