@@ -42,10 +42,12 @@ public class Stay {
 	public void addActivity(StayActivity activity) {
 		activities.add(activity);
 	}
+	
+	public void setActivities(List<StayActivity> activities) {
+		this.activities = activities;
+	}
 
 	public List<StayActivity> getActivities() {
 		return activities;
 	}
-	
-	
 }

@@ -137,6 +137,6 @@ public class BusinessLogicTestCase {
 		Assert.notEmpty(businessLogicController.getAllHistoricalSites());
 		Assert.notEmpty(businessLogicController.getAllHotels());
 		Assert.notEmpty(businessLogicController.searchForTouristicSites("plage activitées"));
-		Assert.notEmpty(businessLogicController.searchPlansForAStay(3,100,10000,StayProfile.Discovery,0.5,"plage activitées"));
+		Assert.notEmpty(businessLogicController.searchPlansForAStay(3,100,10000,StayProfile.Discovery,0.6,"plage activitées"));
 	}
 }

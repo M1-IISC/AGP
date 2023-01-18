@@ -1,10 +1,21 @@
 package businessLogic.stay.builders;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 
+import businessLogic.itinerary.Edge;
+import businessLogic.itinerary.Node;
 import businessLogic.itinerary.ItineraryGraph;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.PeriodOfDay;
+import businessLogic.stay.ChillTime;
+import businessLogic.stay.Excursion;
 import businessLogic.stay.Stay;
 import businessLogic.stay.StayActivity;
 import businessLogic.stay.StayActivityType;
@@ -12,8 +23,25 @@ import businessLogic.stay.StayProfile;
 
 public class StayBuilder implements IStayBuilder {
 
+	private ItineraryGraph itinaryGraph;
+	private int stayDuration;
+	private double minimumPrice;
+	private double maximumPrice;
+	private StayProfile profile;
+	private double quality;
+	private String keywords;
+	
 	@Override
 	public Stay build(ItineraryGraph itinaryGraph, int stayDuration, double minimumPrice, double maximumPrice, StayProfile profile, double quality, String keywords) {	
+		
+		this.itinaryGraph = itinaryGraph;
+		this.stayDuration = stayDuration;
+		this.minimumPrice = minimumPrice;
+		this.maximumPrice = maximumPrice;
+		this.profile = profile;
+		this.quality = quality;
+		this.keywords = keywords;
+		
 		// Tools
 		Random rand = new Random();
 		
@@ -21,11 +49,11 @@ public class StayBuilder implements IStayBuilder {
 		Stay stay = new Stay();
 		
 		// Definition of the starting hotel
-		Hotel hotel = selectBestBeginPoint(quality, minimumPrice, maximumPrice);
+		Hotel hotel = selectBestBeginPoint();
 		stay.setBeginPoint(hotel);
 		
 		// Plan the excursions according to the excursion profile
-		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph, maximumPrice);
+		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph, (minimumPrice + maximumPrice) / 2);
 		int day;
 		boolean dayIsOff = false;
 		for (day = 1; day <= stayDuration; day++) {
@@ -63,14 +91,63 @@ public class StayBuilder implements IStayBuilder {
 			stay.addActivity(afternoonActivity);
 		}
 		
+		reorganise(stay);
+
 		return stay;
 	}
 	
 	
-	private Hotel selectBestBeginPoint(double confort, double minBudget, double maxBudget) {
-		// TODO implements this method;
-		return new Hotel(1, "Hotel1", 500, 1000);
+	private Hotel selectBestBeginPoint() {
+
+		Node startNode = itinaryGraph.getHead();
+
+        Queue<Node> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.add(startNode);
+        visited.add(startNode.getPoint().getName());
+
+        while (!queue.isEmpty()) {
+            Node currentNode = queue.remove();
+
+            if (currentNode.getPoint().getAttractionTime() == 0
+            		&& currentNode.getPoint().getConfort() > quality - 0.1
+            		&& currentNode.getPoint().getConfort() < quality + 0.1) {
+            	return (Hotel) currentNode.getPoint();
+            }
+
+            for (Edge e : currentNode.getEdges()) {
+            	Node neighbour = e.getDestination();
+                if (!visited.contains(neighbour.getPoint().getName())) {
+                    queue.add(neighbour);
+                    visited.add(neighbour.getPoint().getName());
+                }
+            }
+        }
+
+        return null;
 	}
 	
+	private void reorganise(Stay stay) {
+
+		Hotel lastHotel = stay.getBeginPoint();
+		List<StayActivity> newActivities = new ArrayList<StayActivity>();
+
+		for (StayActivity activity : stay.getActivities()) {
+			if (activity.getType() == StayActivityType.Excursion) {
+				Excursion excursion = (Excursion) activity;
+				if (excursion.getRoutes().isEmpty()) {
+					ChillTime chillTime = new ChillTime(excursion.getPeriodOfActivity(), lastHotel);
+					newActivities.add(chillTime);
+				} else {
+					newActivities.add(excursion);
+				}
+			} else {
+				newActivities.add(activity);
+			}
+		}
+		Collections.shuffle(newActivities);
+		stay.setActivities(newActivities);
+	}
 	
 }
