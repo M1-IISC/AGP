@@ -16,17 +16,69 @@ import businessLogic.dataAccess.PlaceObject;
 import businessLogic.itinerary.DBItineraryGraphBuilder;
 import businessLogic.itinerary.ItineraryGraph;
 import businessLogic.itinerary.ItineraryGraphBuilder;
-import spring.springContainer;
 
 public class BusinessLogicController implements IBusinessLogicController {
 		
-	private DataAccesObject dataAccessor = springContainer.getBeanOfClass(DataAccesObject.class);
+	private DataAccesObject dataAccessor;
 	    
-	private JourneyPointFactory hotelFactory = springContainer.getBeanOfClass(JourneyPointFactory.class, "HotelFactory");
-	private JourneyPointFactory touristicSiteFactory = springContainer.getBeanOfClass(JourneyPointFactory.class, "TouristicSiteFactory");
+	private JourneyPointFactory hotelFactory;
+	private JourneyPointFactory touristicSiteFactory;
 	    
-	private ItineraryGraphBuilder graphBuilder = new DBItineraryGraphBuilder(dataAccessor, touristicSiteFactory, hotelFactory);
+	private ItineraryGraphBuilder graphBuilder;
 	
+	public BusinessLogicController() {
+		super();
+	}
+	
+	
+
+	public DataAccesObject getDataAccessor() {
+		return dataAccessor;
+	}
+
+
+
+	public void setDataAccessor(DataAccesObject dataAccessor) {
+		this.dataAccessor = dataAccessor;
+	}
+
+
+
+	public JourneyPointFactory getHotelFactory() {
+		return hotelFactory;
+	}
+
+
+
+	public void setHotelFactory(JourneyPointFactory hotelFactory) {
+		this.hotelFactory = hotelFactory;
+	}
+
+
+
+	public JourneyPointFactory getTouristicSiteFactory() {
+		return touristicSiteFactory;
+	}
+
+
+
+	public void setTouristicSiteFactory(JourneyPointFactory touristicSiteFactory) {
+		this.touristicSiteFactory = touristicSiteFactory;
+	}
+
+
+
+	public ItineraryGraphBuilder getGraphBuilder() {
+		return graphBuilder;
+	}
+
+
+
+	public void setGraphBuilder(ItineraryGraphBuilder graphBuilder) {
+		this.graphBuilder = graphBuilder;
+	}
+
+
 
 	@Override
 	public List<Hotel> getAllHotels() {
