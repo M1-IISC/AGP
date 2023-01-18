@@ -15,10 +15,12 @@ public class Excursion extends StayActivity {
 	@Override
 	public double calculateConfort() {
 		double accumulator = 0.;
+		double count = 0;
 		for(Route route : routes){
 			accumulator += route.getDestination().getConfort() + route.getStrategy().calculateConfort(route.getDistance());
+			count+=2;
 		}
-		return accumulator;
+		return accumulator/count;
 	}
 
 	@Override

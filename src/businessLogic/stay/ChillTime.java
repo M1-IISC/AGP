@@ -14,7 +14,7 @@ public class ChillTime extends StayActivity {
 
 	@Override
 	public double calculateConfort() {
-		return 0;
+		return hotel.getConfort();
 	}
 
 	@Override

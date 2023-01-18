@@ -34,7 +34,8 @@ public class BusStrategy extends TransportStrategy {
 
 	@Override
 	public double calculateConfort(double distance) {
-		return getBaseConfort() + confortOverDistance * distance;
+		double conf = getBaseConfort() + confortOverDistance * distance;
+		return conf > 0 ? conf : 0;
 	}
 
 	@Override

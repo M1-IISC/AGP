@@ -12,7 +12,7 @@ public class Move extends StayActivity {
 
 	@Override
 	public double calculateConfort() {
-		return route.getDestination().getConfort() + route.getStrategy().calculateConfort(route.getDistance());
+		return (route.getDestination().getConfort() + route.getStrategy().calculateConfort(route.getDistance())) / 2;
 	}
 
 	@Override
