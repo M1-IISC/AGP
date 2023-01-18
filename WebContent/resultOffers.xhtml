@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:h="http://java.sun.com/jsf/html" 
+ 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+	<title>Organization of stays</title>
+	
+	<style>  h2 {     
+		color: blue;     
+		font-size: 30px;
+		}
+
+	}  </style>
+		
+		
+</h:head>
+<h:body>
+<center>   <h2> Seychelles c'est chez vous  </h2> </center>
+	<p:button value="CreateYourDreamTrip" styleClass="rounded-button" />
+	<br />
+	<br /> 
+	
+	<style>
+    .product-item .product-item-content {
+        border: 1px solid var(--surface-d);
+        border-radius: 3px;
+        margin: .3rem;
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    .product-item .product-image {
+        width: 50%;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+    }
+</style>
+
+
+<h:form id="form">
+
+    <div class="card">
+        <p:carousel value="" var="product" numVisible="3" numScroll="3"
+                    responsiveOptions="">
+         
+            <div class="product-item">
+                <div class="product-item-content">
+                    <div class="mb-3">
+                    </div>
+                    <div>
+                        <h4 class="mb-1">nom produit</h4>
+                        <h6 class="mt-0 mb-3">
+                            <h:outputText value="">
+                                <f:convertNumber type="currency" pattern="Â¤#0" currencySymbol="$" />
+                            </h:outputText>
+                        </h6>
+                        <span class="product-badge status"></span>
+                        <div class="mt-5">
+                            <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button mr-2" />
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </p:carousel>
+    </div>
+	</h:form>
+	
+</h:body>
+</html>

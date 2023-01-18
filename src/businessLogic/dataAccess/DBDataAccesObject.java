@@ -18,7 +18,7 @@ public class DBDataAccesObject implements DataAccesObject {
 
 	public void setPersistanceLayerInterface(IBDePersistence persistanceLayerInterface) {
 		this.persistanceLayerInterface = persistanceLayerInterface;
-		String seychellesSitesPath = System.getProperty("user.dir") + System.getProperty("file.separator") + "seychelles_sites";
+		String seychellesSitesPath = System.getenv().get("SEYCHELLES_SITES_PATH");
 		persistanceLayerInterface.configure("site", "name", seychellesSitesPath);
 		persistanceLayerInterface.createTextIndex();
 	}
