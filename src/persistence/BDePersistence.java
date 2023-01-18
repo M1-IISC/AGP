@@ -256,4 +256,20 @@ public class BDePersistence implements IBDePersistence {
 		}
 	}
 
+	public String getTableName() {
+		return tableName;
+	}
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public String getRepositoryPath() {
+		return repositoryPath;
+	}
+
+	public String getIndexPath() {
+		return indexPath;
+	}
+
 }
