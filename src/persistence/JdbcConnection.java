@@ -3,6 +3,11 @@ package persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * 
+ * This singleton represents the SQL connection for Jdbc
+ *
+ */
 class JdbcConnection {
 	
 	private static String host = "localhost";
