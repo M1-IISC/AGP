@@ -29,7 +29,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
 public class BDePersistence implements IBDePersistence {
-	
+
 	private Analyzer analyseur = new StandardAnalyzer();
 	
 	private String tableName, keyName, repositoryPath, indexPath;
@@ -44,10 +44,9 @@ public class BDePersistence implements IBDePersistence {
 
 	@Override
 	public void createTextIndex() {
-	    Directory index;
 		try {
 			// Get text index directory with the index path
-			index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
+			Directory index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
 			
 			// If index already exists, abort creating text index (avoiding index duplicates)
 			if (DirectoryReader.indexExists(index)) {
@@ -56,18 +55,18 @@ public class BDePersistence implements IBDePersistence {
 			
 			// Creating the index writer
 			IndexWriterConfig config = new IndexWriterConfig(analyseur);
-			IndexWriter w = new IndexWriter(index, config);
+			IndexWriter indexWriter = new IndexWriter(index, config);
 			
 			// For each files into the repository path, adding these files to the text index
 			for (File f : new File(repositoryPath).listFiles()) {
 			   	Document doc = new Document();
 			   	doc.add(new TextField("name", FilenameUtils.removeExtension(f.getName()), Field.Store.YES));
 			   	doc.add(new TextField("content", new FileReader(f)));
-			   	w.addDocument(doc);
+			   	indexWriter.addDocument(doc);
 		    }
 		   	
 			// Closing the index writer
-		   	w.close();
+		   	indexWriter.close();
 		} catch (IOException e) {
 			// TODO
 			System.err.println(e.getMessage());
@@ -76,8 +75,45 @@ public class BDePersistence implements IBDePersistence {
 
 	@Override
 	public void addText(String key, String text) {
-		// TODO Auto-generated method stub
-		
+		// Creating new file in the repository named by the key string
+		File f = new File(repositoryPath + System.getProperty("file.separator") + key + ".txt");
+		try {
+			// If file is successfully created
+			if (f.createNewFile()) {
+				// Create new file writer
+				FileWriter fileWriter = new FileWriter(f);
+				
+				// Write text into the file
+				fileWriter.write(text);
+				
+				// Close the writer
+				fileWriter.close();
+				
+				// Get text index directory with the index path
+				Directory index = FSDirectory.open(FileSystems.getDefault().getPath(indexPath));
+				
+				// If index doesn't already exists, abort adding text to the text index
+				if (!DirectoryReader.indexExists(index)) {
+					return;
+				}
+				
+				// Creating the index writer
+				IndexWriterConfig config = new IndexWriterConfig(analyseur);
+				IndexWriter indexWriter = new IndexWriter(index, config);
+				
+				Document doc = new Document();
+			   	doc.add(new TextField("name", FilenameUtils.removeExtension(f.getName()), Field.Store.YES));
+			   	doc.add(new TextField("content", new FileReader(f)));
+			   	indexWriter.addDocument(doc);
+			   	
+			   	// Closing the index writer
+			   	indexWriter.close();
+			}
+		} catch (IOException e) {
+			// TODO
+			f.delete();
+			System.err.println(e.getMessage());
+		}
 	}
 
 	@Override
@@ -193,7 +229,7 @@ public class BDePersistence implements IBDePersistence {
 		    	float docScore = luceneResults.scoreDocs[i].score;
 		    	Document d = searcher.doc(docId);
 		    	
-		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + "/" + d.get("name") + ".txt")));
+		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + System.getProperty("file.separator") + d.get("name") + ".txt")));
 		    	
 		    	Map<String, Object> result = new HashMap<>();
 		    	result.put(keyName, d.get("name"));

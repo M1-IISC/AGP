@@ -5,7 +5,10 @@ import java.util.Map;
 
 class LuceneTextResultSet implements BDeResultSet {
 	
+	// List representing Text result set
 	private List<Map<String, Object>> textResultSet;
+	
+	// Index representing the position of the cursor in the Text result set
 	private int index;
 	
 	public LuceneTextResultSet(List<Map<String, Object>> results) {
@@ -29,8 +32,6 @@ class LuceneTextResultSet implements BDeResultSet {
 		try {
 			return textResultSet.get(index);
 		} catch(IndexOutOfBoundsException e) {
-			// TODO logger
-			e.printStackTrace();
 			return null;
 		}
 	}
