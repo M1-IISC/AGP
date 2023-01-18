@@ -48,7 +48,7 @@ public class DBDataAccesObject implements DataAccesObject {
 			//here note we do not use the score to filter, but we should
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
-					null, //(String)line.get("descroption") //TODO
+					line.get("price") == null? null: "" ,//TODO get description
 					getValue((Float)line.get("comfort")),
 					getValue((Float)line.get("duration")),
 					getValue((Float)line.get("price")),
@@ -80,7 +80,7 @@ public class DBDataAccesObject implements DataAccesObject {
 			//here note we do not use the score to filter, but we should
 			placeObjectList.add(new PlaceObject(
 					(String)line.get("name"),
-					null, //(String)line.get("descroption") //TODO
+					line.get("price") == null? null: "" ,//TODO get description
 					getValue((Float)line.get("comfort")),
 					getValue((Float)line.get("duration")),
 					getValue((Float)line.get("price")),
@@ -118,7 +118,7 @@ public class DBDataAccesObject implements DataAccesObject {
 					//place source
 					new PlaceObject(
 							(String)line.get("startName"),
-							null, //(String)line.get("descroption") //TODO
+							line.get("startCost") == null? null: "" ,//TODO get description
 							getValue((Float)line.get("startComfort")),
 							getValue((Float)line.get("startDuration")),
 							getValue((Float)line.get("startCost")),
@@ -130,7 +130,7 @@ public class DBDataAccesObject implements DataAccesObject {
 					//place destination
 					new PlaceObject(
 							(String)line.get("endName"),
-							null, //(String)line.get("descroption") //TODO
+							line.get("endCost") == null? null: "" ,//TODO get description
 							getValue((Float)line.get("endComfort")),
 							getValue((Float)line.get("endDuration")),
 							getValue((Float)line.get("endCost")),
