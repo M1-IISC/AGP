@@ -81,6 +81,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		List<Edge> edges = findAvailableEdges(startingPoint, startingNode);
 		for (Edge edge : edges) {
 			double F = initialF - calculateF(startingPoint, edge);
+			open.add(edge);
 			edge.setScore(F);
 			edge.setPrevious(null);
 		}
@@ -215,12 +216,14 @@ public class StayActivityBuilder implements IStayActivityBuilder {
         
         while (!queue.isEmpty()) {
             Node currentNode = queue.remove();
+            
+            if (currentNode.getPoint().getName().equals(point.getName())) {
+            	return currentNode;
+            }
+            
             for (Edge e : currentNode.getEdges()) {
             	Node neighbour = e.getDestination();
                 if (!visited.contains(neighbour.getPoint().getName())) {
-                	if (neighbour.getPoint().getName() == point.getName()) {
-                		return neighbour;
-                	}
                     queue.add(neighbour);
                     visited.add(neighbour.getPoint().getName());
                 }

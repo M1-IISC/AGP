@@ -69,7 +69,7 @@ public class StayBuilder implements IStayBuilder {
 	
 	private Hotel selectBestBeginPoint(double confort, double minBudget, double maxBudget) {
 		// TODO implements this method;
-		return null;
+		return new Hotel(1, "Hotel1", 500, 1000);
 	}
 	
 	
