@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.nio.file.Paths;
 import java.util.Map;
 
 import org.junit.Before;
@@ -59,7 +58,7 @@ public class BDeTestCase {
 	 */
 	@Test
 	public void testExecuteCombinedQuery() {
-		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name FROM Site s WHERE s.category = 'LEISURE' WITH plage");
+		BDeResultSet bdeResultSet = bdePersistence.executeQuery("SELECT s.name, s.category FROM Site s WHERE s.category = 'LEISURE' WITH plage");
 		
 		assertTrue(bdeResultSet.next());
 		Map<String, Object> currentItem = bdeResultSet.getCurrentItem();

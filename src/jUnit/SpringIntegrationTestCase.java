@@ -8,7 +8,6 @@ import businessLogic.IBusinessLogicController;
 import businessLogic.dataAccess.DataAccesObject;
 import businessLogic.itinerary.ItineraryGraphBuilder;
 import businessLogic.journeyPoint.JourneyPointFactory;
-import businessLogic.stay.builders.IStayActivityBuilder;
 import businessLogic.stay.builders.IStayBuilder;
 import spring.springContainer;
 
@@ -47,12 +46,12 @@ public class SpringIntegrationTestCase {
 	@Test
 	public void testStayBuilderBean()
 	{
-		Assert.notNull(springContainer.getBeanOfClass(IStayBuilder.class));;	
+		Assert.notNull(springContainer.getBeanOfClass(IStayBuilder.class));
 	}
 	
 	@Test
 	public void testBusinessLogicControllerBean()
 	{
-		Assert.notNull(springContainer.getBeanOfClass(IBusinessLogicController.class));;	
+		Assert.notNull(springContainer.getBeanOfClass(IBusinessLogicController.class));
 	}
 }

@@ -32,7 +32,6 @@ public class BusinessLogicTestCase {
 		dataAccessor = springContainer.getBeanOfClass(DataAccesObject.class);
 		hotelFactory = springContainer.getBeanOfClass(JourneyPointFactory.class, "HotelFactory");
 		touristicSiteFactory = springContainer.getBeanOfClass(JourneyPointFactory.class, "TouristicSiteFactory");
-		//graphBuilder = new DBItineraryGraphBuilder(dataAccessor, touristicSiteFactory, hotelFactory);
 		graphBuilder = springContainer.getBeanOfClass(ItineraryGraphBuilder.class);
 		businessLogicController = springContainer.getBeanOfClass(IBusinessLogicController.class);	
 	}
@@ -65,6 +64,7 @@ public class BusinessLogicTestCase {
 			Assert.isTrue(place.getDescription()==null);
 			Assert.isTrue(place.getLunchCost()!=0);
 			Assert.isTrue(place.getNightCost()!=0);
+			Assert.isTrue(place.getAccuracy()==1);
 		}
 		objects = dataAccessor.fetchAllSites();
 		Assert.notEmpty(objects);
@@ -76,8 +76,9 @@ public class BusinessLogicTestCase {
 			Assert.isTrue(place.getNightCost()==0);
 		}
 		objects = dataAccessor.fetchSitesByKeywords("");
+		objects = dataAccessor.fetchSitesByKeywords("plage activitées");
 		Assert.notEmpty(objects);
-		Assert.notEmpty(dataAccessor.fetchSitesRelationsByKeywords(""));
+		Assert.notEmpty(dataAccessor.fetchSitesRelationsByKeywords("plage activitées"));
 	}
 	
 	@Test
@@ -90,7 +91,7 @@ public class BusinessLogicTestCase {
 	@Test
 	public void graphBuilderTests()
 	{
-		ItineraryGraph graph = graphBuilder.build("");
+		ItineraryGraph graph = graphBuilder.build("plage activitées");
 		Assert.notNull(graph);
 		Assert.notNull(graph.getHead());
 	}
@@ -101,7 +102,7 @@ public class BusinessLogicTestCase {
 		Assert.notEmpty(businessLogicController.getAllActivitySites());
 		Assert.notEmpty(businessLogicController.getAllHistoricalSites());
 		Assert.notEmpty(businessLogicController.getAllHotels());
-		Assert.notEmpty(businessLogicController.searchForTouristicSites(""));
-		Assert.notEmpty(businessLogicController.searchPlansForAStay(3,100,10000,StayProfile.Discovery,0.5,""));
+		Assert.notEmpty(businessLogicController.searchForTouristicSites("plage activitées"));
+		Assert.notEmpty(businessLogicController.searchPlansForAStay(3,100,10000,StayProfile.Discovery,0.5,"plage activitées"));
 	}
 }
