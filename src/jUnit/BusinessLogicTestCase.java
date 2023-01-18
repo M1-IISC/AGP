@@ -75,6 +75,7 @@ public class BusinessLogicTestCase {
 			Assert.isTrue(place.getLunchCost()==0);
 			Assert.isTrue(place.getNightCost()==0);
 		}
+		objects = dataAccessor.fetchSitesByKeywords("");
 		objects = dataAccessor.fetchSitesByKeywords("plage activitées");
 		Assert.notEmpty(objects);
 		Assert.notEmpty(dataAccessor.fetchSitesRelationsByKeywords("plage activitées"));
