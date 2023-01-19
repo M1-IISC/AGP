@@ -67,11 +67,8 @@ header {
    	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
 }
 
-#stay {
+#stayOffers {
 	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	margin-left: 2rem;
 }
 
 #pnl {
@@ -96,8 +93,19 @@ header {
 	margin-top: 1px;
 }
 
+.product-item .product-item-content {
+        border: 1px solid var(--surface-d);
+        border-radius: 3px;
+        margin: .3rem;
+        text-align: center;
+        padding: 2rem 0;
+    }
 
-}  </style>
+.product-item .product-image {
+    width: 50%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)
+} 
+</style>
 		
 		
 </h:head>
@@ -108,36 +116,58 @@ header {
 		<p:commandButton id="btn-find-trip" value="Plan your dream trip now" icon="pi pi-calendar" styleClass="rounded-button" action="#{indexBean.startCreateYourDreamTrip}" />
 	</header>
 	<div id="banner-parent"></div>
- 	<center><strong><h3>Choose your stay </h3></strong></center>
+ 	<center><strong><h3>Choissez votre séjour ! </h3></strong></center>
 	
-	<div class="card">
-    <h:form>
-	    <ui:repeat var="stay" value="#{resultOffersBean.stays}">
-	    	<div id="stay">
-			        <p:panel id="pnl" header="Séjour">
-			            <div id="dataStay" >
-			            	<div id="data">
-			                <h:outputLabel for="hotel" value="Hôtel : "/>
-			                	<h:outputText id="hotel" value="#{stay.getBeginPoint().name}" />
-			                </div>
-			                <div id="data">
-							<h:outputLabel for="price" value="Prix : "/>
-			                	<h:outputText id="price" value="#{stay.calculateCost()}" />
-			                </div>
-			                <div id="data">
-			                <h:outputLabel for="duration" value="Durée en jour : "/>
-			                	<h:outputText id="duration" value="#{formBean.stayDuration}" />
-			        		</div>
-			                <div id="data">
-			                <h:outputLabel for="comfort" value="Confort : "/>
-			                	<h:outputText id="comfort" value="#{stay.calculateConfort()}"/>
-			               </div>
-			         </div>
-			            <p:commandButton id="selectStay" value="Voir" action="#{resultOffersBean.descStay}" />
-			        </p:panel>
-		        </div>
-	        </ui:repeat>
-        </h:form>
-        </div>
+	<p:carousel value="#{resultOffersBean.stays}" var="stay" numVisible="3" numScroll="3">
+            <f:facet name="header">
+                <h3>Choissez votre séjour !</h3>
+            </f:facet>
+            <div class="product-item">
+                <div class="product-item-content">
+                	<div class="mb-3">
+                        
+                    </div>
+                    <div>
+                        <h4 class="mb-1">#{stay.getBeginPoint().name}</h4>
+                        <h6 class="mt-0 mb-3">
+                        	<p:rating  readonly="true" id="comfort" value="#{resultOffersBean.printComfort(stay)}"/>
+				            <h:outputText id="duration" value="#{formBean.stayDuration} jours - " />
+                            <h:outputText value="#{stay.calculateCost()} €"/>
+                        </h6>
+                        <div class="mt-5">
+                            <p:commandButton id="selectStay" value="Voir" action="#{resultOffersBean.descStay(stay)}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </p:carousel>
+	
+	<div id="stayOffers">
+	    <h:form>
+		    <ui:repeat var="stay" value="#{resultOffersBean.stays}">
+				        <p:panel id="pnl" header="Séjour">
+				            <div id="dataStay" >
+				            	<div id="data">
+				                <h:outputLabel for="hotel" value="Hôtel : "/>
+				                	<h:outputText id="hotel" value="#{stay.getBeginPoint().name}" />
+				                </div>
+				                <div id="data">
+								<h:outputLabel for="price" value="Prix : "/>
+				                	<h:outputText id="price" value="#{stay.calculateCost()}" />
+				                </div>
+				                <div id="data">
+				                <h:outputLabel for="duration" value="Durée en jour : "/>
+				                	<h:outputText id="duration" value="#{formBean.stayDuration}" />
+				        		</div>
+				                <div id="data">
+				
+				                	<p:rating  readonly="true" id="comfort" value="#{resultOffersBean.printComfort(stay)}"/>
+				               </div>
+				         </div>
+				            <p:commandButton id="selectStay" value="Voir" action="#{resultOffersBean.descStay}" />
+				        </p:panel>
+		        </ui:repeat>
+	        </h:form>
+       </div>
 </h:body>
 </html>

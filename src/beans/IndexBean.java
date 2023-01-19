@@ -7,6 +7,7 @@ import javax.faces.bean.SessionScoped;
 import businessLogic.IBusinessLogicController;
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.TouristicSite;
+import businessLogic.stay.Stay;
 import spring.springContainer;
 
 @ManagedBean
@@ -19,6 +20,7 @@ public class IndexBean {
 	private List<TouristicSite> activities;
 	private String query;
 	private List<TouristicSite> results;
+	private Stay selectedStay;
 	
 	public IndexBean() {
 		setHotels(controller.getAllHotels());
@@ -111,6 +113,16 @@ public class IndexBean {
 
 	public void setResults(List<TouristicSite> results) {
 		this.results = results;
+	}
+
+
+	public Stay getSelectedStay() {
+		return selectedStay;
+	}
+
+
+	public void setSelectedStay(Stay selectedStay) {
+		this.selectedStay = selectedStay;
 	}
 
 }

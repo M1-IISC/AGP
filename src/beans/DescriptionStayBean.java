@@ -5,6 +5,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import businessLogic.IBusinessLogicController;
 import businessLogic.stay.Stay;
@@ -12,13 +13,13 @@ import businessLogic.stay.StayProfile;
 import spring.springContainer;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class DescriptionStayBean {
     private IBusinessLogicController contro2 = springContainer.getBeanOfClass(IBusinessLogicController.class);
 
 	@ManagedProperty(value = "#{resultOffersBean}")
     private ResultOffersBean resultOffersBean;
-	
+
 	
 	public DescriptionStayBean() {
 		
@@ -44,8 +45,16 @@ public class DescriptionStayBean {
 		this.resultOffersBean = resultOffersBean;
 	}
 	
-	/*public Stay getStay() {
-		return resultOffersBean.getStay();
+	public Stay getStay() {
+		return resultOffersBean.getFormBean().getIndexBean().getSelectedStay();
+	}
+	
+	/*public String printComfort(Stay stay) {
+		if (stay != null) {
+			double comfort = stay.calculateConfort() * 5;
+			return String.valueOf((int)comfort);
+		}
+		return "null";
 	}*/
 	
 }

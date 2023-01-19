@@ -17,7 +17,7 @@ import spring.springContainer;
 @ViewScoped
 public class ResultOffersBean {
     private IBusinessLogicController contro = springContainer.getBeanOfClass(IBusinessLogicController.class);
-
+    
 	@ManagedProperty(value = "#{formBean}")
     private FormBean formBean;
 	
@@ -50,15 +50,15 @@ public class ResultOffersBean {
 		this.contro = contro;
 	}
 	
-	public Stay getStay() {
-		List<Stay> stays = formBean.getStays();
-		for(Stay stay : stays) {
-			
-		}
-		
+	
+	public String printComfort(Stay stay) {
+		double comfort = stay.calculateConfort() * 5;
+		return String.valueOf((int)comfort);
 	}
 	
-	public String descStay() { 
+	public String descStay(Stay stay) {
+		formBean.getIndexBean().setSelectedStay(stay);
         return "descriptionStay";
     }
+
 }
