@@ -80,12 +80,14 @@ header {
 	    </h:form>
 	</div>
 	</center>
-  <p:linkButton  value="Hostels" style="margin-right:40px;  border-color:blue ; color:white "></p:linkButton>
+  <p:linkButton  value="Hotels" style="margin-right:40px;  border-color:blue ; color:white "></p:linkButton>
   <p:linkButton  value="Activities" style="margin-right:40px; color: white"></p:linkButton>
   <p:linkButton  value="Historical sites" style="margin-right:40px; color: white"></p:linkButton>
-
-   <ui:repeat var="hotel" value="#{indexBean.startHotels()}">
-		<p>Test</p>
+   	<ui:repeat var="hotel" value="#{indexBean.hotels}">
+		<div>
+			<h:outputText value="#{hotel.name}"></h:outputText>
+			<h:outputText value="#{indexBean.printHotelComfort(hotel)}"></h:outputText>
+		</div>
 	</ui:repeat>
 </h:body>
 </html>

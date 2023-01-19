@@ -24,11 +24,20 @@ public class ResultOffersBean {
 		
 	}
 	
-	 public FormBean getFormBean() {
-	        return formBean;
-	 }
+	public FormBean getFormBean() {
+	   return formBean;
+	}
 
     public void setFormBean(FormBean formBean) {
         this.formBean = formBean;
     }
+    
+    public List<Stay> getStays() {
+    	return formBean.getStays();
+    }
+    
+    public int getStayDuration() {
+    	return formBean.getStayDuration();
+    }
+    
 }
