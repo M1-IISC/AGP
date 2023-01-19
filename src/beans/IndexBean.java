@@ -14,14 +14,15 @@ public class IndexBean {
 	
 	private IBusinessLogicController controller = springContainer.getBeanOfClass(IBusinessLogicController.class);
 	private List<Hotel> hotels;
-
-	public IndexBean() { 
-		
+	private List<TouristicSite> historicalSites;
+	
+	public IndexBean() {
+		hotels = controller.getAllHotels();
+		setHistoricalSites(controller.getAllHistoricalSites());
 	}
 	
 	
 	public String startHotels() {
-		hotels = controller.getAllHotels();
 		return "hotels";
 	}
 	
@@ -30,7 +31,6 @@ public class IndexBean {
 	}
 	
 	public String startHistoricalSites() {
-		controller.getAllHistoricalSites();
 		return "toursticsites";
 	}
 
@@ -43,7 +43,12 @@ public class IndexBean {
 	public void setController(IBusinessLogicController controller) {
 		this.controller = controller;
 	}
-
+	
+	
+	public double printHotelComfort(Hotel hotel) {
+		double comfort = hotel.getConfort() * 5;
+		return (int) comfort;
+	}
 
 	public List<Hotel> getHotels() {
 		return hotels;
@@ -52,6 +57,16 @@ public class IndexBean {
 
 	public void setHotels(List<Hotel> hotels) {
 		this.hotels = hotels;
+	}
+
+
+	public List<TouristicSite> getHistoricalSites() {
+		return historicalSites;
+	}
+
+
+	public void setHistoricalSites(List<TouristicSite> historicalSites) {
+		this.historicalSites = historicalSites;
 	}
 
 }

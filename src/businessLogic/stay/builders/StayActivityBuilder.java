@@ -1,6 +1,7 @@
 package businessLogic.stay.builders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.lang.Math;
 import java.util.LinkedList;
@@ -27,10 +28,12 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	private static final int MAX_ACTIVITIES = 5;  
 	private static final double MAX_TIME = 5;  
 	
-	ItineraryGraph itineraryGraph;
-	double budget;
-	double remainingTime;
-	PeriodOfDay periodOfDay;
+	private int searchId = 0;
+
+	private ItineraryGraph itineraryGraph;
+	private double budget;
+	private PeriodOfDay periodOfDay;
+	private Hotel startingPoint;
 	
 	public StayActivityBuilder(ItineraryGraph itineraryGraph, double budget) {
 		this.itineraryGraph = itineraryGraph;
@@ -40,8 +43,8 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	@Override
 	public StayActivity build(Hotel startingPoint, Hotel arrivalPoint, PeriodOfDay periodOfDay, StayActivityType type) {
 		
-		this.periodOfDay = periodOfDay; 
-		this.remainingTime = MAX_TIME;
+		this.periodOfDay = periodOfDay;
+		this.startingPoint = startingPoint;
 		
 		StayActivity activity = null;
 		
@@ -50,6 +53,7 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			activity = new ChillTime(periodOfDay, startingPoint);
 			break;
 		case Excursion:
+			searchId++;
 			List<Route> itinerary = findBestItinerary(startingPoint);
 			activity = new Excursion(periodOfDay, itinerary);
 			break;
@@ -67,12 +71,6 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 	
 	private List<Route> findBestItinerary(Hotel startingPoint) {		
 		// Initialization
-		double remainingActivities = 1;
-		double remainingBudget = 1;
-		double tiredness = 0;
-		
-		double initialF = remainingActivities + remainingBudget + tiredness;
-		
 		Set<Edge> open = new HashSet<>();
 		Set<Edge> closed = new HashSet<>();
 		
@@ -80,12 +78,13 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 				
 		// First step with the starting node
 		Node startingNode = findPointInGraph(startingPoint);
-		List<Edge> edges = findAvailableEdges(startingPoint, startingNode);
+		List<Edge> edges = startingNode.getEdges();
 		for (Edge edge : edges) {
-			double F = initialF - calculateF(startingPoint, edge, initialF);
-			open.add(edge);
-			edge.setScore(F);
-			edge.setPrevious(null);
+			computeNeighborScore(null, edge);
+			if (edge.getScore() > 0) {
+				// The edge is valid, so we add it
+				open.add(edge);
+			}
 		}
 		
 		Edge currentEdge = null;
@@ -99,105 +98,152 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 				break;
 			}
 			
-			// Check all attractions around the current node
-			edges = findAvailableEdges(startingPoint, currentEdge.getDestination());
+			// Check all edges linked to the current node
+			edges = currentEdge.getDestination().getEdges();
 			for (Edge edge : edges) {
-				double F = calculateF(startingPoint, edge, currentEdge.getScore());
-				if (F == -1) { continue; }
-				F = currentEdge.getScore() - F;
 				if (!closed.contains(edge)) {
-					if (open.contains(edge)) {
-						// This is not a new route
-						if (F < edge.getScore()) {
-							// We find a better path
-							edge.setScore(F);
-							edge.setPrevious(currentEdge);
-						}
-					} else {
-						// This is a new route
+					computeNeighborScore(currentEdge, edge);
+					if (!open.contains(edge) && edge.getScore() > 0) {
+						// The edge is valid and it's a new one
 						open.add(edge);
-						edge.setScore(F);
-						edge.setPrevious(currentEdge);
+					} else if (open.contains(edge) && edge.getScore() < 0) {
+						open.remove(edge);
 					}
 				}
 			};
 		}
 		
-		// Build the best itinerary
-		while(currentEdge.getPrevious() != null) {
+		// No itinerary
+		if (currentEdge == null) { return routes; }
+
+		// Build the best itinerary		
+		while(currentEdge != null) {
 			routes.add(currentEdge.createRoute());
-			currentEdge = currentEdge.getPrevious();
+			if (currentEdge.getDestination().getPoint().getAttractionTime() != 0) {
+				// Newly visited tourist sites (during this excursion will no longer be offered)
+				currentEdge.getDestination().setAvailable(false);	
+			}	
+			currentEdge = currentEdge.getPrevious(); 
 		}
 		
+		Collections.reverse(routes); // Order the list - back to the hotel in last
 		return routes;
 	}	
 	
-	private double calculateF(Hotel startingPoint, Edge edge, double currentF) {
+	
+	private void computeNeighborScore(Edge currentEdge, Edge neighborEdge) {
+		TransportStrategy transport = neighborEdge.getStrategy();
+		JourneyPoint attraction = neighborEdge.getDestination().getPoint();
+
+		if (neighborEdge.getSearchId() < searchId) {
+			// This is a new search, so the edge must be re-initialized
+			neighborEdge.init();
+		}
 		
-		TransportStrategy transport = edge.getStrategy();
-		JourneyPoint attraction = edge.getDestination().getPoint();
+		boolean neverVisited = neighborEdge.getPrevious() == null;
 		
-		// Impact the budget
-		double transportCost = transport.calculatePrice(edge.getDistance());
+		// ------------------------------------------------------------
+		// Check availability
+		if (attraction.getAttractionTime() == 0 && !attraction.getName().equals(startingPoint.getName())) {
+			neighborEdge.setScore(-1);
+			return;
+		}
+
+		if (!neighborEdge.getDestination().isAvailable()) {
+			neighborEdge.setScore(-1);
+			return;
+		}
+		// ------------------------------------------------------------
+		
+		// ------------------------------------------------------------
+		// 1) REMAINING BUDGET
+		double transportCost = transport.calculatePrice(neighborEdge.getDistance());
 		double attractionCost = attraction.calculateCost(periodOfDay);
 		
-		double routeCost = (transportCost + attractionCost) / budget;
+		double edgeCost = (transportCost + attractionCost) / budget;
+
+		double remainingBudget = -1;
+		if (currentEdge != null) {
+			remainingBudget = currentEdge.getRemainingBudget() - edgeCost;	
+		} else {
+			remainingBudget = neighborEdge.getRemainingBudget() - edgeCost;
+		}
+
+		if (remainingBudget < 0) {
+			neighborEdge.setScore(-1); // This edge is not valid with this current itinerary
+			return;
+		} 
 		
-		// Impact the remaining time 
-		double transportTime = transport.calculateTime(edge.getDistance());
+		// 2) REMAINING TIME 
+		double transportTime = transport.calculateTime(neighborEdge.getDistance());
 		double attractionTime = attraction.getAttractionTime();
 		
-		double routeTime = (transportTime + attractionTime) / MAX_TIME;
-		
-		// Impact the remaining activities to do
-		double numberOfActivity = 1.0 / (double) MAX_ACTIVITIES;
-		
-		// Impact the comfort sensation
-		double transportTiredness = 1 - transport.calculateConfort(edge.getDistance());
-		double attractionTiredness = 1 - attraction.getConfort();
-		
-		double routeTiredness = Math.max(attractionTiredness, transportTiredness);
-		
-		
-		// Add the minimal cost of the return route to the hotel
-		double Hmin = 10;
-		for (Edge returnRoute : edge.getDestination().getEdges()) {
-			if (returnRoute.getDestination().getPoint().getName().equals(startingPoint.getName())) {
-				double returnTime = returnRoute.getStrategy().calculateTime(returnRoute.getDistance());
-				double returnPrice = returnRoute.getStrategy().calculatePrice(returnRoute.getDistance());		
-				double H = (returnTime / MAX_TIME) + (returnPrice / budget);
-				if (H < Hmin) {
-					Hmin = H;
-				}
-			}
-		}
-		
-		double score = routeCost + numberOfActivity + routeTiredness;
-		
-		if (currentF - score < 0) {
-			return -1;
-		}
-		
-		return score;
-	}
+		double	edgeTime = (transportTime + attractionTime) / MAX_TIME;
 
-	private List<Edge> findAvailableEdges(Hotel startingPoint, Node node) {
-		List<Edge> routes = new ArrayList<Edge>();
-		
-		for (Edge e : node.getEdges()) {
-			double time = e.getDestination().getPoint().getAttractionTime();
-			if (time != 0) {
-				// It's an attraction
-				routes.add(e);
-			}
-			if (e.getDestination().getPoint().getName().equals(startingPoint.getName())) {
-				// It's the starting point (the hotel)
-				routes.add(e);
-			}
+		double remainingTime = -1;
+		if (currentEdge != null) {
+			remainingTime = currentEdge.getRemainingTime() - edgeTime;	
+		} else {
+			remainingTime = neighborEdge.getRemainingTime() - edgeTime;
+		}
+
+		if (remainingTime < 0) {
+			neighborEdge.setScore(-1); // This edge is not valid with this current itinerary
+			return;
 		}
 		
-		return routes;
-	}
+		// 3) REMAINING ACTIVITIES
+		double numberOfActivity = 1.0 / (double) MAX_ACTIVITIES;
+
+		double remainingActivities = -1;
+		if (currentEdge != null) {
+			remainingActivities = currentEdge.getRemainingActivities() - numberOfActivity;	
+		} else {
+			remainingActivities = neighborEdge.getRemainingActivities() - numberOfActivity;
+		}
+		
+		if (remainingActivities < 0) {
+			neighborEdge.setScore(-1); // This edge is not valid with this current itinerary
+			return;
+		}
+		
+		// 4) COMFORT SENSATION
+		double transportTiredness = 1 - transport.calculateConfort(neighborEdge.getDistance());
+		double attractionTiredness = 1 - attraction.getConfort();
+
+		double edgeTiredness = Math.max(attractionTiredness, transportTiredness);
+		
+		double tiredness = -1;
+		if (currentEdge != null) {
+			tiredness = currentEdge.getTiredness() + edgeTiredness;	
+		} else {
+			tiredness = neighborEdge.getTiredness() + edgeTiredness;
+		}
+		
+		// ------------------------------------------------------------
+		// Calculate total score (F)
+		double score = remainingBudget + remainingActivities + tiredness;
+
+		if (neverVisited) {
+			neighborEdge.setRemainingActivities(remainingActivities);
+			neighborEdge.setRemainingBudget(remainingBudget);
+			neighborEdge.setRemainingTime(remainingTime);
+			neighborEdge.setTiredness(tiredness);
+			neighborEdge.setScore(score);
+			neighborEdge.setPrevious(currentEdge);
+		} else {
+			if (neighborEdge.getScore() < score) {
+				// The new score is better than the old one
+				neighborEdge.setRemainingActivities(remainingActivities);
+				neighborEdge.setRemainingBudget(remainingBudget);
+				neighborEdge.setRemainingTime(remainingTime);
+				neighborEdge.setTiredness(tiredness);
+				neighborEdge.setScore(score);
+				neighborEdge.setPrevious(currentEdge);
+			}
+		}	
+	}	
+	
 	
 	private Edge getBestRoute(Set<Edge> set) {
 		double min = Double.MAX_VALUE;
@@ -225,14 +271,8 @@ public class StayActivityBuilder implements IStayActivityBuilder {
         
         while (!queue.isEmpty()) {
             Node currentNode = queue.remove();
-            
-            /*
+
             if (currentNode.getPoint().getName().equals(point.getName())) {
-            	return currentNode;
-            }
-            */
-            
-            if (currentNode.getPoint().getAttractionTime() == 0) {
             	return currentNode;
             }
             

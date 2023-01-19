@@ -9,11 +9,16 @@ public class Node {
 	private List<Edge> edges; 
 	private double accuracy;
 	
+	private boolean available;
+	
 	public Node(JourneyPoint point, List<Edge> edges, double accurency) {
 		super();
 		this.point = point;
 		this.edges = edges;
 		this.accuracy = accurency;
+		
+		// Default value
+		this.available = true;
 	}
 
 	public List<Edge> getEdges() {
@@ -30,5 +35,13 @@ public class Node {
 
 	public void setAccuracy(double accurency) {
 		this.accuracy = accurency;
+	}
+	
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 }
