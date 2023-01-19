@@ -2,9 +2,10 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	  xmlns:h="http://java.sun.com/jsf/html"
-	   xmlns:f="http://java.sun.com/jsf/core"
-	   	xmlns:p="http://primefaces.org/ui"
-		xmlns:ui="http://java.sun.com/jsf/facelets">
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 	
 <h:head>
@@ -54,18 +55,30 @@ header {
     align-items: center;
 }
 
+.product-list-detail {
+	margin: 1em;
+}
+
+.product-name {
+	font-size: 18px;
+}
+
+.product-price {
+	font-weight: bold;
+}
+
 </style>
 
 
 <h:body>
 	<header>
 		<h2>🌴 Les Seychelles c'est chez vous !</h2>
-		<p:commandButton id="btn-find-trip" value="Plan your dream trip now" icon="pi pi-calendar" styleClass="rounded-button" action="#{indexBean.startCreateYourDreamTrip}" />
+		<p:commandButton id="btn-find-trip" value="Plannifier votre séjour de rêve" icon="pi pi-calendar" styleClass="rounded-button" action="#{indexBean.startCreateYourDreamTrip}" />
 	</header>
 	<div id="banner-parent"></div>
- 	<center><strong><h3>Itineraries and tours </h3></strong></center>
+ 	<center><strong><h3>Itinéraires et séjours</h3></strong></center>
  	<div id="sub-title">
- 	<p>Visitors to Seychelles are spoilt for choice, with a plethora of options to explore the vibrant land's cultural sites, world classe restaurants, beachfront luxury hotels</p>
+ 	<p>Les visiteurs des Seychelles ont tout loisir de découvrir les sites culturels, les restaurants de classe mondiale, les hôtels de luxe en bord de mer de ce magnifique territoire.</p>
  	</div>
 	<center>
 	<div class="card">
@@ -73,21 +86,60 @@ header {
 	        <p:fragment>
 	            <p:autoUpdate/>
 	            <h:panelGrid columns="20" cellpadding="20">
-	                <p:inputText id="txt"  placeholder="Key word"/>
-	                <p:commandButton value="Search"/>
+	                <p:inputText id="txt"  placeholder="Effectuez une recherche"/>
+	                <p:commandButton value="Rechercher"/>
 	            </h:panelGrid>
 	        </p:fragment>
 	    </h:form>
 	</div>
 	</center>
-  <p:linkButton  value="Hotels" style="margin-right:40px;  border-color:blue ; color:white "></p:linkButton>
-  <p:linkButton  value="Activities" style="margin-right:40px; color: white"></p:linkButton>
-  <p:linkButton  value="Historical sites" style="margin-right:40px; color: white"></p:linkButton>
-   	<ui:repeat var="hotel" value="#{indexBean.hotels}">
-		<div>
-			<h:outputText value="#{hotel.name}"></h:outputText>
-			<h:outputText value="#{indexBean.printHotelComfort(hotel)}"></h:outputText>
-		</div>
-	</ui:repeat>
+  	<p:tabView>
+  		<p:tab title="Hôtels">
+  			<div class="product">
+               <div class="product-list-item">
+			    <ui:repeat var="hotel" value="#{indexBean.hotels}">
+                	<div class="product-list-detail">
+                		<div style="display: flex;">
+                			<div class="product-name">#{hotel.name}</div>
+                			<p:rating style="margin-left: 8px;" readonly="true" value="#{indexBean.printHotelComfort(hotel)}"/>
+                		</div>
+                        <div class="product-description">Description non disponible.</div>
+                        <h:outputText value="#{hotel.nightCost} € /night" styleClass="product-price"></h:outputText>
+                    </div>
+				</ui:repeat>           
+               </div>
+           </div>
+  		</p:tab>
+        <p:tab title="Activités">
+        	<div class="product">
+               <div class="product-list-item">
+			    	<ui:repeat var="activity" value="#{indexBean.activities}">
+	                	<div class="product-list-detail">
+	                		<div style="display: flex;">
+	                			<div class="product-name">#{activity.name}</div>
+	                		</div>
+	                        <div class="product-description">#{activity.description}</div>
+	                        <h:outputText value="#{activity.calculateCost(null)} €" styleClass="product-price"></h:outputText>
+	                    </div>
+					</ui:repeat>          
+               </div>
+           </div>
+        </p:tab>
+        <p:tab title="Sites historiques">
+        	<div class="product">
+               <div class="product-list-item">
+			    	<ui:repeat var="historical" value="#{indexBean.historicalSites}">
+	                	<div class="product-list-detail">
+	                		<div style="display: flex;">
+	                			<div class="product-name">#{historical.name}</div>
+	                		</div>
+	                        <div class="product-description">#{historical.description}</div>
+	                        <h:outputText value="#{historical.calculateCost(null)} €" styleClass="product-price"></h:outputText>
+	                    </div>
+					</ui:repeat>          
+               </div>
+           </div>
+        </p:tab>
+    </p:tabView>
 </h:body>
 </html>
