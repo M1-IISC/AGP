@@ -151,8 +151,11 @@ public class BusinessLogicController implements IBusinessLogicController {
 		ItineraryGraph itineraryGraph = graphBuilder.build(keywords);
 		
 		IStayBuilder builder = new StayBuilder();
-		Stay stay = builder.build(itineraryGraph, stayDuration, minimumPrice, maximumPrice, profile, quality, keywords);
-		stays.add(stay);
+		
+		for (int i = 0; i < 5; i++) {
+			Stay stay = builder.build(itineraryGraph, stayDuration, minimumPrice, maximumPrice, profile, quality, keywords);
+			stays.add(stay);
+		}
 		
 		return stays;
 	}

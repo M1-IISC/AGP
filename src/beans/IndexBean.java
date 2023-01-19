@@ -1,6 +1,7 @@
 package beans;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import businessLogic.IBusinessLogicController;
@@ -15,10 +16,14 @@ public class IndexBean {
 	private IBusinessLogicController controller = springContainer.getBeanOfClass(IBusinessLogicController.class);
 	private List<Hotel> hotels;
 	private List<TouristicSite> historicalSites;
+	private List<TouristicSite> activities;
+	private String query;
+	private List<TouristicSite> results;
 	
 	public IndexBean() {
-		hotels = controller.getAllHotels();
+		setHotels(controller.getAllHotels());
 		setHistoricalSites(controller.getAllHistoricalSites());
+		setActivities(controller.getAllActivitySites());
 	}
 	
 	
@@ -33,6 +38,11 @@ public class IndexBean {
 	public String startHistoricalSites() {
 		return "toursticsites";
 	}
+	
+	public String startSearch() {
+		search();
+		return "search?faces-redirect=true";
+	}
 
 
 	public IBusinessLogicController getController() {
@@ -45,9 +55,13 @@ public class IndexBean {
 	}
 	
 	
-	public double printHotelComfort(Hotel hotel) {
+	public void search() {
+		results = controller.searchForTouristicSites(query);
+	}
+	
+	public String printHotelComfort(Hotel hotel) {
 		double comfort = hotel.getConfort() * 5;
-		return (int) comfort;
+		return String.valueOf((int) comfort);
 	}
 
 	public List<Hotel> getHotels() {
@@ -67,6 +81,36 @@ public class IndexBean {
 
 	public void setHistoricalSites(List<TouristicSite> historicalSites) {
 		this.historicalSites = historicalSites;
+	}
+
+
+	public List<TouristicSite> getActivities() {
+		return activities;
+	}
+
+
+	public void setActivities(List<TouristicSite> activities) {
+		this.activities = activities;
+	}
+
+
+	public String getQuery() {
+		return query;
+	}
+
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+
+	public List<TouristicSite> getResults() {
+		return results;
+	}
+
+
+	public void setResults(List<TouristicSite> results) {
+		this.results = results;
 	}
 
 }

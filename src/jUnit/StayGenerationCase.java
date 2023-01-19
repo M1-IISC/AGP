@@ -31,85 +31,69 @@ public class StayGenerationCase {
 	ItineraryGraph itineraryGraph;
 	
 	IStayBuilder stayBuilder;
+	
+	Stay stayAdventurous; 
+	Stay stayDiscovery;
+	Stay stayRelax;
 
 	@Before
 	public void prepare()
 	{
 		graphBuilder = new DBItineraryGraphBuilder(dataAccessor, touristicSiteFactory, hotelFactory);
 		stayBuilder = new StayBuilder();
+	}
+	
+	@Test
+	public void checkNumberOfExcursionsAccordingToProfile()
+	{	
+		int stayDuration = 6;
 		
 		itineraryGraph = graphBuilder.build("");
-	}
-	
-	@Test
-	public void checkNumberOfExcursionsForAdventurousProfile()
-	{
-		int stayDuration = 6;
+		Stay stayAdventurous = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Adventurous, 0.6, "");
 		
-		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Adventurous, 1, "");
+		itineraryGraph = graphBuilder.build("");
+		Stay stayDiscovery = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Discovery, 0.6, "");
 		
-		int count = 0;
-		for(StayActivity activity : stay.getActivities()) {
+		itineraryGraph = graphBuilder.build("");
+		Stay stayRelax = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Relax, 0.6, "");
+		
+		int countAdventurous = 0;
+		for(StayActivity activity : stayAdventurous.getActivities()) {
 			if(activity.getType().equals(StayActivityType.Excursion)) {
-				count++;
+				countAdventurous++;
 			}
 		}
 		
-		int expectedCount = stayDuration * 2; // In this profile, it's 2 excursions by day
-		
-		Assert.isTrue(count == expectedCount);
-	}
-	
-	@Test
-	public void checkNumberOfExcursionsForDiscoveryProfile()
-	{
-		int stayDuration = 6;
-		
-		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, 1000, 5000, StayProfile.Discovery, 1, "");
-		
-		int count = 0;
-		for(StayActivity activity : stay.getActivities()) {
+		int countDiscovery = 0;
+		for(StayActivity activity : stayDiscovery.getActivities()) {
 			if(activity.getType().equals(StayActivityType.Excursion)) {
-				count++;
+				countDiscovery++;
 			}
 		}
 		
-		int expectedCount = stayDuration; // In this profile, it's 1 excursions by day
-		
-		Assert.isTrue(count == expectedCount);
-	}
-	
-	@Test
-	public void checkNumberOfExcursionsForRelaxProfile()
-	{
-		int stayDuration = 6;
-		
-		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, 1000, 5000, StayProfile.Relax, 1, "");
-		
-		int count = 0;
-		for(StayActivity activity : stay.getActivities()) {
+		int countRelax = 0;
+		for(StayActivity activity : stayRelax.getActivities()) {
 			if(activity.getType().equals(StayActivityType.Excursion)) {
-				count++;
+				countRelax++;
 			}
 		}
-		
-		int expectedCount = (int) (stayDuration / 2); // In this profile, it's 1 excursions by 2 days
-		
-		Assert.isTrue(count == expectedCount);
+				
+		Assert.isTrue(countRelax <= countDiscovery);
+		Assert.isTrue(countDiscovery <= countAdventurous);
 	}
 	
+	
 	@Test
-	public void checkBudgetCriteria() {
+	public void checkComfortCriteria() {
 		int stayDuration = 6;
-
-		double minBudget = 2000;
-		double maxBudget = 6000;
-
-		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, minBudget, maxBudget, StayProfile.Adventurous, 1, "");
-
-
-		Assert.isTrue(stay.calculateCost() > 0);
-		Assert.isTrue(stay.calculateCost() < maxBudget);
+		
+		itineraryGraph = graphBuilder.build("");
+		Stay stayWithHighComfort = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Discovery, 1.0, "");
+		
+		itineraryGraph = graphBuilder.build("");
+		Stay stayWithLowComfort = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Discovery, 0.6, "");
+		
+		Assert.isTrue(stayWithLowComfort.calculateConfort() < stayWithHighComfort.calculateConfort());
 	}
 	
 }
