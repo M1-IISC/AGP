@@ -9,32 +9,57 @@
 <h:head>
 	<title>Organization of stays</title>
 	
-	<style>  h2 {     
-		color: blue;     
-		font-size: 30px;
+	<style> 
+		body {
+			font-family : system-ui;
+			margin: 0px;
 		}
-		 body {
-        background-image: url("./images/imgform.jpg");
-        background-repeat: no-repeat;
-        background-size: cover;
+		h2 {
+			font-size: 30px;
+		}
+		h3{
+			font-size: 20px;
+			margin: 0.4em;
+		}
+		body {
+        	background-image: url("./images/seychelles.jpg");
+        	background-repeat: no-repeat;
+        	background-size: cover;
         }
-	}  </style>
+        header {
+        	background-color: white;
+			padding: 1em;
+			display: flex;
+		    flex-direction: row;
+		    align-items: flex-start;
+		}  
+		
+		#card-trip {
+			background-color: rgb(255 255 255 / 0.2);
+			backdrop-filter: blur(20px);
+			border-radius: 10px;
+			padding:  1em 2em;
+			margin-top: 2em;
+			margin-left: auto;
+    		margin-right: auto;
+			width: fit-content;
+		}
+		
+	</style>
 		
 		
 </h:head>
 <h:body>
-	<center>   <h2> Seychelles c'est chez vous  </h2> </center>
-	<p:button value="CreateYourDreamTrip" styleClass="rounded-button" />
-	<br />
-	<h3>Please enter your criteria for the stay</h3>
-	<fieldset>
-		<div class="card">
+	<header>
+		<h2>🌴 Les Seychelles c'est chez vous !</h2>
+	</header>
+		<div id="card-trip" class="card">
+			<h3>Your criteria for the stay</h3>
 			<h:form>
 				<h:panelGrid id="grid1" columns="4" cellpadding="7">
 					<p:outputLabel for="nbdays" value="Number of days"/>
                 	<p:inputNumber id="nbdays" value=""  minValue="1" decimalPlaces="0"/>
 	    		</h:panelGrid>
-	    		
 	    		<h:panelGrid id="grid2" columns="4" cellpadding="7">
 					<p:outputLabel for="priceMin" value="Price minimun"/>
                 	<p:inputNumber id="priceMin" value="" minValue="1" decimalPlaces="0" />
@@ -52,20 +77,19 @@
 				<h:panelGrid id="grid4" columns="4" cellpadding="7">
 					<p:outputLabel for="profile" value="Profile of excursion"/>
 					<p:selectOneRadio id="profile" value="">
-            			<f:selectItem itemLabel="relax" itemValue="Relax"/>
-            			<f:selectItem itemLabel="discovery" itemValue="Discovery"/>
-            			<f:selectItem itemLabel="adventure" itemValue="Adventure"/>
+            			<f:selectItem itemLabel="Relax 🏖️" itemValue="Relax"/>
+            			<f:selectItem itemLabel="Discovery 📸" itemValue="Discovery"/>
+            			<f:selectItem itemLabel="Adventure 🎒" itemValue="Adventure"/>
        				</p:selectOneRadio>
 				</h:panelGrid>
 				<h:panelGrid id="grid5" columns="4" cellpadding="7">
-					<p:outputLabel for="keyWords" value="keyWords"/>
-					<p:inputTextarea id="keyWords" value="" rows="6" cols="55" placeholder="Type of excursion wanted, activities, historique sites, ..."/>
+					<p:inputTextarea id="keyWords" value="" rows="6" cols="55" placeholder="Tell us what you want to do : activities, historique sites, ..."/>
 				</h:panelGrid>
 				<h:panelGrid id="grid6" columns="4" cellpadding="7">
 				</h:panelGrid>
+				<p:button value="Search for a stay" />
 			</h:form>
 		</div>
-	</fieldset>
 
 </h:body>
 </html>
