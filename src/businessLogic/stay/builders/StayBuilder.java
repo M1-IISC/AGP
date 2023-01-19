@@ -106,6 +106,8 @@ public class StayBuilder implements IStayBuilder {
 
         queue.add(startNode);
         visited.add(startNode.getPoint().getName());
+        
+        List<Node> interestingHotel = new ArrayList<>();
 
         while (!queue.isEmpty()) {
             Node currentNode = queue.remove();
@@ -113,7 +115,7 @@ public class StayBuilder implements IStayBuilder {
             if (currentNode.getPoint().getAttractionTime() == 0
             		&& currentNode.getPoint().getConfort() > quality - 0.1
             		&& currentNode.getPoint().getConfort() < quality + 0.1) {
-            	return (Hotel) currentNode.getPoint();
+            	interestingHotel.add(currentNode);
             }
 
             for (Edge e : currentNode.getEdges()) {
@@ -125,7 +127,12 @@ public class StayBuilder implements IStayBuilder {
             }
         }
 
-        return null;
+        if (interestingHotel.isEmpty()) {
+        	return null;
+        } else {
+        	Random rand = new Random();
+            return (Hotel) interestingHotel.get(rand.nextInt(interestingHotel.size())).getPoint();
+        }
 	}
 	
 	private void reorganise(Stay stay) {

@@ -27,7 +27,7 @@ public class Excursion extends StayActivity {
 	public double calculateCost() {
 		double accumulator = 0.;
 		for(Route route : routes){
-			accumulator += route.getDestination().calculateCost(getPeriodOfActivity()) + route.getStrategy().calculateConfort(route.getDistance());
+			accumulator += route.getDestination().calculateCost(getPeriodOfActivity()) + route.getStrategy().calculatePrice(route.getDistance());
 		}
 		return accumulator;
 	}

@@ -58,8 +58,8 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			activity = new Excursion(periodOfDay, itinerary);
 			break;
 		case Move:
-			//TODO add route to the other hotel
 			activity = new Move(periodOfDay, null);
+			startingPoint = arrivalPoint;
 			break;
 		}
 		
@@ -224,6 +224,9 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		// Calculate total score (F)
 		double score = remainingBudget + remainingActivities + tiredness;
 
+		double H = calculateH(neighborEdge);
+		score = score - H;
+		
 		if (neverVisited) {
 			neighborEdge.setRemainingActivities(remainingActivities);
 			neighborEdge.setRemainingBudget(remainingBudget);
@@ -244,6 +247,26 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 		}	
 	}	
 	
+	/**
+	 * It is a process of evaluating the journey back to the hotel.
+	 * @param edge
+	 * @return
+	 */
+	private double calculateH(Edge edge) {
+		Node node = edge.getDestination();
+		double H = 1;
+		for(Edge neighborEdge : node.getEdges()) {
+			if (neighborEdge.getDestination().getPoint().getName().equals(startingPoint.getName())) {
+				TransportStrategy transport = neighborEdge.getStrategy();
+				double transportTime = transport.calculateTime(neighborEdge.getDistance());
+				double edgeTime = transportTime / MAX_TIME;
+				if (edgeTime < H) {
+					H = edgeTime;
+				}
+			}
+		}
+		return H;
+	}
 	
 	private Edge getBestRoute(Set<Edge> set) {
 		double min = Double.MAX_VALUE;
