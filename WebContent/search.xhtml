@@ -84,7 +84,7 @@
 	</header>
 	<center>
 	<h:form>  
-		<p:button icon="pi pi-arrow-left" action="#{searchBean.back}"/>
+		<p:commandButton icon="pi pi-arrow-left" action="#{searchBean.back}"/>
 		<p:inputText class="search-bar" id="search-bar" value="#{indexBean.query}"  placeholder="Effectuez une recherche par mots-clés"/>
 		<p:commandButton value="Rechercher" action="#{indexBean.startSearch}"/>
 	</h:form>  
