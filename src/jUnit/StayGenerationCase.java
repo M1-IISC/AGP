@@ -46,7 +46,7 @@ public class StayGenerationCase {
 	{
 		int stayDuration = 6;
 		
-		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, 1000, 5000, StayProfile.Adventurous, 1, "");
+		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, 8000, 10000, StayProfile.Adventurous, 1, "");
 		
 		int count = 0;
 		for(StayActivity activity : stay.getActivities()) {
@@ -96,6 +96,20 @@ public class StayGenerationCase {
 		int expectedCount = (int) (stayDuration / 2); // In this profile, it's 1 excursions by 2 days
 		
 		Assert.isTrue(count == expectedCount);
+	}
+	
+	@Test
+	public void checkBudgetCriteria() {
+		int stayDuration = 6;
+
+		double minBudget = 2000;
+		double maxBudget = 6000;
+
+		Stay stay = stayBuilder.build(itineraryGraph, stayDuration, minBudget, maxBudget, StayProfile.Adventurous, 1, "");
+
+
+		Assert.isTrue(stay.calculateCost() > 0);
+		Assert.isTrue(stay.calculateCost() < maxBudget);
 	}
 	
 }

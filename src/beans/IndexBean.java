@@ -15,13 +15,11 @@ public class IndexBean {
 	private IBusinessLogicController controller = springContainer.getBeanOfClass(IBusinessLogicController.class);
 	private List<Hotel> hotels;
 
-	public IndexBean() { 
-		
-	}
+	public IndexBean() {}
 	
 	
 	public String startHotels() {
-		hotels = controller.getAllHotels();
+		//hotels = controller.getAllHotels();
 		return "hotels";
 	}
 	
