@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import businessLogic.IBusinessLogicController;
 import businessLogic.stay.Stay;
@@ -13,9 +14,10 @@ import businessLogic.stay.StayProfile;
 import spring.springContainer;
 
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class ResultOffersBean {
-	
+    private IBusinessLogicController contro = springContainer.getBeanOfClass(IBusinessLogicController.class);
+
 	@ManagedProperty(value = "#{formBean}")
     private FormBean formBean;
 	
@@ -39,5 +41,24 @@ public class ResultOffersBean {
     public int getStayDuration() {
     	return formBean.getStayDuration();
     }
-    
+
+	public IBusinessLogicController getContro() {
+		return contro;
+	}
+
+	public void setContro(IBusinessLogicController contro) {
+		this.contro = contro;
+	}
+	
+	public Stay getStay() {
+		List<Stay> stays = formBean.getStays();
+		for(Stay stay : stays) {
+			
+		}
+		
+	}
+	
+	public String descStay() { 
+        return "descriptionStay";
+    }
 }

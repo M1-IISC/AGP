@@ -105,7 +105,7 @@ public class FormBean {
     
     
 	public String findStays() { 
-        stays = iblc.searchPlansForAStay(stayDuration, minimumPrice, maximumPrice, profile, quality, keywords);
+    	stays = iblc.searchPlansForAStay(stayDuration, minimumPrice, maximumPrice, profile, quality, keywords);
         return "resultOffers";
     }
 	

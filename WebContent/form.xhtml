@@ -58,36 +58,36 @@
 			<h:form>
 				<h:panelGrid id="grid1" columns="4" cellpadding="7">
 					<p:outputLabel for="nbdays" value="Number of days"/>
-                	<p:inputNumber id="nbdays" value=""  minValue="1" decimalPlaces="0"/>
+                	<p:inputNumber id="nbdays" value="#{formBean.stayDuration}"  minValue="1" decimalPlaces="0"/>
 	    		</h:panelGrid>
 	    		<h:panelGrid id="grid2" columns="4" cellpadding="7">
 					<p:outputLabel for="priceMin" value="Price minimun"/>
-                	<p:inputNumber id="priceMin" value="" minValue="1" decimalPlaces="0" />
+                	<p:inputNumber id="priceMin" value="#{formBean.minimumPrice}" minValue="1" decimalPlaces="0" />
                 	<p:outputLabel for="priceMax" value="Price maximun"/>
-                	<p:inputNumber id="priceMax" value="" minValue="1" decimalPlaces="0" />
+                	<p:inputNumber id="priceMax" value="#{formBean.maximumPrice}" minValue="1" decimalPlaces="0" />
 				</h:panelGrid>
 				<h:panelGrid id="grid3" columns="4" cellpadding="7">
 					<p:outputLabel for="comfort" value="Comfort"/>
-					<p:selectOneButton id="comfort" value="">
-	            		<f:selectItem itemLabel="3" itemValue="3/5"/>
-	            		<f:selectItem itemLabel="4" itemValue="4/5"/>
-	            		<f:selectItem itemLabel="5" itemValue="5/5"/>
+					<p:selectOneButton id="comfort" value="#{formBean.quality}">
+	            		<f:selectItem itemLabel="3" itemValue="3"/>
+	            		<f:selectItem itemLabel="4" itemValue="4"/>
+	            		<f:selectItem itemLabel="5" itemValue="5"/>
 	        		</p:selectOneButton>			 
 				</h:panelGrid>
 				<h:panelGrid id="grid4" columns="4" cellpadding="7">
 					<p:outputLabel for="profile" value="Profile of excursion"/>
-					<p:selectOneRadio id="profile" value="">
+					<p:selectOneRadio id="profile" value="#{formBean.profile}">
             			<f:selectItem itemLabel="Relax 🏖️" itemValue="Relax"/>
             			<f:selectItem itemLabel="Discovery 📸" itemValue="Discovery"/>
-            			<f:selectItem itemLabel="Adventure 🎒" itemValue="Adventure"/>
+            			<f:selectItem itemLabel="Adventurous 🎒" itemValue="Adventurous"/>
        				</p:selectOneRadio>
 				</h:panelGrid>
 				<h:panelGrid id="grid5" columns="4" cellpadding="7">
-					<p:inputTextarea id="keyWords" value="" rows="6" cols="55" placeholder="Tell us what you want to do : activities, historique sites, ..."/>
+					<p:inputTextarea id="keyWords" value="#{formBean.keywords}" rows="6" cols="55" placeholder="Tell us what you want to do : activities, historique sites, ..."/>
 				</h:panelGrid>
 				<h:panelGrid id="grid6" columns="4" cellpadding="7">
 				</h:panelGrid>
-				<p:button value="Search for a stay" />
+				<p:commandButton value="Search for a stay" action="#{formBean.findStays}" />
 			</h:form>
 		</div>
 
