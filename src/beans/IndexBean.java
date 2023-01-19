@@ -1,6 +1,7 @@
 package beans;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import businessLogic.IBusinessLogicController;
@@ -16,6 +17,8 @@ public class IndexBean {
 	private List<Hotel> hotels;
 	private List<TouristicSite> historicalSites;
 	private List<TouristicSite> activities;
+	private String query;
+	private List<TouristicSite> results;
 	
 	public IndexBean() {
 		setHotels(controller.getAllHotels());
@@ -35,6 +38,11 @@ public class IndexBean {
 	public String startHistoricalSites() {
 		return "toursticsites";
 	}
+	
+	public String startSearch() {
+		search();
+		return "search?faces-redirect=true";
+	}
 
 
 	public IBusinessLogicController getController() {
@@ -47,14 +55,13 @@ public class IndexBean {
 	}
 	
 	
+	public void search() {
+		results = controller.searchForTouristicSites(query);
+	}
+	
 	public String printHotelComfort(Hotel hotel) {
 		double comfort = hotel.getConfort() * 5;
 		return String.valueOf((int) comfort);
-	}
-	
-	public String[] tabTitles() {
-		String[] titles = {"Hotels", "Activities", "Historical sites"};
-		return titles;
 	}
 
 	public List<Hotel> getHotels() {
@@ -84,6 +91,26 @@ public class IndexBean {
 
 	public void setActivities(List<TouristicSite> activities) {
 		this.activities = activities;
+	}
+
+
+	public String getQuery() {
+		return query;
+	}
+
+
+	public void setQuery(String query) {
+		this.query = query;
+	}
+
+
+	public List<TouristicSite> getResults() {
+		return results;
+	}
+
+
+	public void setResults(List<TouristicSite> results) {
+		this.results = results;
 	}
 
 }

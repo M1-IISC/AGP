@@ -10,66 +10,66 @@
 	
 <h:head>
 	<title>Page d'accueil</title>
+	<style>
+	body {
+		font-family : system-ui;
+		margin: 0px;
+	}
+	h2 {
+		font-size: 30px;
+	}
+	h3{
+		font-size: 50px;
+		margin: 0.4em;
+	}
+	
+	#banner-parent{
+		height: 20em;
+		background-image: url("./images/seychelles.jpg");
+		background-position: 50% 60%;
+	}
+	
+	#banner {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+	
+	#sub-title {
+		text-align: center;
+		font-size: 24px;
+	}
+	
+	#btn-find-trip {
+		position: relative; 
+	}
+	
+	.search-bar {
+		width: 30em;
+		margin: 2em;
+	}
+	
+	header {
+		padding: 1em;
+		display: flex;
+	    flex-direction: row;
+	    justify-content: space-between;
+	    align-items: center;
+	}
+	
+	.product-list-detail {
+		margin: 1em;
+	}
+	
+	.product-name {
+		font-size: 18px;
+	}
+	
+	.product-price {
+		font-weight: bold;
+	}
+	</style>
 </h:head>
-
-<style>
-
-body {
-	font-family : system-ui;
-	margin: 0px;
-}
-h2 {
-	font-size: 30px;
-}
-h3{
-	font-size: 50px;
-	margin: 0.4em;
-}
-
-#banner-parent{
-	height: 20em;
-	background-image: url("./images/seychelles.jpg");
-	background-position: 50% 60%;
-}
-
-#banner {
-	max-width: 100%;
-	max-height: 100%;
-	object-fit: contain;
-}
-
-#sub-title {
-	text-align: center;
-	font-size: 24px;
-}
-
-#btn-find-trip {
-	position: relative; 
-}
-
-header {
-	padding: 1em;
-	display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.product-list-detail {
-	margin: 1em;
-}
-
-.product-name {
-	font-size: 18px;
-}
-
-.product-price {
-	font-weight: bold;
-}
-
-</style>
-
-
 <h:body>
 	<header>
 		<h2>🌴 Les Seychelles c'est chez vous !</h2>
@@ -81,17 +81,10 @@ header {
  	<p>Les visiteurs des Seychelles ont tout loisir de découvrir les sites culturels, les restaurants de classe mondiale, les hôtels de luxe en bord de mer de ce magnifique territoire.</p>
  	</div>
 	<center>
-	<div class="card">
-	    <h:form>
-	        <p:fragment>
-	            <p:autoUpdate/>
-	            <h:panelGrid columns="20" cellpadding="20">
-	                <p:inputText id="txt"  placeholder="Effectuez une recherche"/>
-	                <p:commandButton value="Rechercher"/>
-	            </h:panelGrid>
-	        </p:fragment>
-	    </h:form>
-	</div>
+	<h:form>  
+		<p:inputText class="search-bar" id="search-bar" value="#{indexBean.query}"  placeholder="Effectuez une recherche par mots-clés"/>
+		<p:commandButton value="Rechercher" action="#{indexBean.startSearch}"/>
+	</h:form>  
 	</center>
   	<p:tabView>
   		<p:tab title="Hôtels">

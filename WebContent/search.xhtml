@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	
+<h:head>
+	<title>Résultats de recherche</title>
+	<style>
+	body {
+		font-family : system-ui;
+		margin: 0px;
+	}
+	h2 {
+		font-size: 30px;
+	}
+	h3{
+		font-size: 20px;
+		margin: 0.4em;
+	}
+	
+	#banner-parent{
+		height: 20em;
+		background-image: url("./images/seychelles.jpg");
+		background-position: 50% 60%;
+	}
+	
+	#banner {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+	
+	#sub-title {
+		text-align: center;
+		font-size: 24px;
+	}
+	
+	#btn-find-trip {
+		position: relative; 
+	}
+	
+	.search-bar {
+		width: 30em;
+		margin: 2em;
+	}
+	
+	header {
+		padding: 1em;
+		display: flex;
+	    flex-direction: row;
+	    justify-content: space-between;
+	    align-items: center;
+	}
+	
+	#results {
+		margin-top: 2em;
+		margin-left: 2em;
+	  	margin-right: auto;
+		width: fit-content;
+	}
+	
+	.product-list-detail {
+		margin: 1em;
+	}
+	
+	.product-name {
+		font-size: 18px;
+	}
+	
+	.product-price {
+		font-weight: bold;
+	}
+	</style>
+</h:head>
+
+<h:body>
+	<header>
+		<h2>🌴 Les Seychelles c'est chez vous !</h2>
+	</header>
+	<center>
+	<h:form>  
+		<p:button icon="pi pi-arrow-left" action="#{searchBean.back}"/>
+		<p:inputText class="search-bar" id="search-bar" value="#{indexBean.query}"  placeholder="Effectuez une recherche par mots-clés"/>
+		<p:commandButton value="Rechercher" action="#{indexBean.startSearch}"/>
+	</h:form>  
+	</center>
+	<div id="results">
+		<h3>#{searchBean.resultsLenght()} résultats de recherche pour "#{indexBean.query}"</h3>
+		<ui:repeat var="result" value="#{indexBean.results}">
+              	<div class="product-list-detail">
+            		<div style="display: flex;">
+            			<div class="product-name">#{result.name}</div>
+            		</div>
+                    <div class="product-description">#{result.description}</div>
+                    <i class="pi pi-tag product-category-icon"/>
+                    <span class="product-category">#{result.category}</span>
+                    <h:outputText style="margin-left: 1em;" value="#{result.calculateCost(null)} €" styleClass="product-price"></h:outputText>
+                </div>
+		</ui:repeat>  
+	</div>
+</h:body>
+</html>
