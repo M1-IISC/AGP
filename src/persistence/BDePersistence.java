@@ -229,7 +229,7 @@ public class BDePersistence implements IBDePersistence {
 		    	float docScore = luceneResults.scoreDocs[i].score;
 		    	Document d = searcher.doc(docId);
 		    	
-		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + System.getProperty("file.separator") + d.get("name") + ".txt")));
+		    	String description = new String(Files.readAllBytes(Paths.get(repositoryPath + System.getProperty("file.separator") + d.get("name") + ".txt")), "UTF-8");
 		    	
 		    	Map<String, Object> result = new HashMap<>();
 		    	result.put(keyName, d.get("name"));
