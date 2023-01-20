@@ -19,4 +19,13 @@ public abstract class StayActivity {
 	public PeriodOfDay getPeriodOfActivity() {
 		return periodOfActivity;
 	}
+	
+	public boolean isExcursion() {
+		return getType() == StayActivityType.Excursion;
+	}
+	
+	public boolean isChillTime() {
+		return getType() == StayActivityType.ChillTime;
+	}
+	
 }
