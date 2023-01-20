@@ -53,16 +53,30 @@ public class StayBuilder implements IStayBuilder {
 		stay.setBeginPoint(hotel);
 		
 		// Plan the excursions according to the excursion profile
-		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph, (minimumPrice + maximumPrice) / 2);
+		IStayActivityBuilder activityBuilder = new StayActivityBuilder(itinaryGraph, maximumPrice);
 		int day;
 		boolean dayIsOff = false;
+		boolean needAMove = false;
+		boolean moveDone = false;
 		for (day = 1; day <= stayDuration; day++) {
+			
+			double actualCost = calculateCost(stay);
+			if ((actualCost / day) > (maximumPrice / stayDuration)) {
+				needAMove = true;
+			}
+			
 			StayActivity morningActivity;
 			StayActivity afternoonActivity;
 			if (dayIsOff) {
 				morningActivity = activityBuilder.build(hotel, null, PeriodOfDay.Morning, StayActivityType.ChillTime);
 				afternoonActivity = activityBuilder.build(hotel, null, PeriodOfDay.Afternoon, StayActivityType.ChillTime);
 				dayIsOff = false; // Next day is not off
+			} else if (!moveDone && needAMove && day >= 2) {
+				Hotel newHotel = selectCheaperHotel();
+				morningActivity = activityBuilder.build(hotel, newHotel, PeriodOfDay.Morning, StayActivityType.Move);
+				hotel = newHotel;
+				afternoonActivity = activityBuilder.build(hotel, null, PeriodOfDay.Afternoon, StayActivityType.ChillTime);
+				moveDone = true;
 			} else {
 				if (profile == StayProfile.Discovery || profile == StayProfile.Relax) {
 					int randomPeriodOfExcursion = rand.nextInt(2); 
@@ -95,7 +109,10 @@ public class StayBuilder implements IStayBuilder {
 
 		return stay;
 	}
-	
+		
+	private double calculateCost(Stay stay) {
+		return stay.calculateCost();
+	}
 	
 	private Hotel selectBestBeginPoint() {
 
@@ -108,9 +125,14 @@ public class StayBuilder implements IStayBuilder {
         visited.add(startNode.getPoint().getName());
         
         List<Node> interestingHotel = new ArrayList<>();
-
+        List<Node> hotels = new ArrayList<>();
+        
         while (!queue.isEmpty()) {
             Node currentNode = queue.remove();
+            
+            if (currentNode.getPoint().getAttractionTime() == 0) {
+            	hotels.add(currentNode);
+            }
 
             if (currentNode.getPoint().getAttractionTime() == 0
             		&& currentNode.getPoint().getConfort() > quality - 0.1
@@ -127,11 +149,55 @@ public class StayBuilder implements IStayBuilder {
             }
         }
 
+        Random rand = new Random();
         if (interestingHotel.isEmpty()) {
-        	return null;
+        	return (Hotel) hotels.get(rand.nextInt(hotels.size())).getPoint();
         } else {
-        	Random rand = new Random();
             return (Hotel) interestingHotel.get(rand.nextInt(interestingHotel.size())).getPoint();
+        }
+	}
+	
+	private Hotel selectCheaperHotel() {
+
+		Node startNode = itinaryGraph.getHead();
+
+        Queue<Node> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.add(startNode);
+        visited.add(startNode.getPoint().getName());
+        
+        double minPrice = Double.MAX_VALUE;
+        Node interestingHotel = null;
+        List<Node> hotels = new ArrayList<>();
+        
+        while (!queue.isEmpty()) {
+            Node currentNode = queue.remove();
+            
+            if (currentNode.getPoint().getAttractionTime() == 0) {
+            	hotels.add(currentNode);
+            	Hotel hotel = (Hotel) currentNode.getPoint();
+            	if (hotel.getNightCost() < minPrice) {
+            		minPrice = hotel.getNightCost();
+            		interestingHotel = currentNode;
+            	}
+            }
+
+
+            for (Edge e : currentNode.getEdges()) {
+            	Node neighbour = e.getDestination();
+                if (!visited.contains(neighbour.getPoint().getName())) {
+                    queue.add(neighbour);
+                    visited.add(neighbour.getPoint().getName());
+                }
+            }
+        }
+
+        Random rand = new Random();
+        if (interestingHotel == null) {
+        	return (Hotel) hotels.get(rand.nextInt(hotels.size())).getPoint();
+        } else {
+            return (Hotel) interestingHotel.getPoint();
         }
 	}
 	
@@ -153,7 +219,6 @@ public class StayBuilder implements IStayBuilder {
 				newActivities.add(activity);
 			}
 		}
-		Collections.shuffle(newActivities);
 		stay.setActivities(newActivities);
 	}
 	

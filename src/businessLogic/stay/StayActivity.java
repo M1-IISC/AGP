@@ -24,6 +24,10 @@ public abstract class StayActivity {
 		return getType() == StayActivityType.Excursion;
 	}
 	
+	public boolean isMove() {
+		return getType() == StayActivityType.Move;
+	}
+	
 	public boolean isChillTime() {
 		return getType() == StayActivityType.ChillTime;
 	}

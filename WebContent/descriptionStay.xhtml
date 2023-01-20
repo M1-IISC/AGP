@@ -143,6 +143,11 @@ header {
 						        <p class="activity-title">Temps libre</p>
 						    </div>
 						</ui:fragment>
+						<ui:fragment rendered="#{descriptionStayBean.getActivityOfMorning(day).isMove()}">
+						    <div>
+						        <p class="activity-title">Changement d'hotel vers #{descriptionStayBean.nameOfHotel(descriptionStayBean.getActivityOfMorning(day).route)}</p>
+						    </div>
+						</ui:fragment>
 					</p:panel>
 					<p:panel style="margin-top: 1em;" header="Après-midi">
 						 <ui:fragment rendered="#{descriptionStayBean.getActivityOfAfternoon(day).isExcursion()}">

@@ -111,6 +111,14 @@ public class DescriptionStayBean {
 		}
 	}
 	
+	public String nameOfHotel(Route route) {
+		if (route.getDestination().getAttractionTime() == 0) {
+			// It's an hotel
+			return route.getDestination().getName();
+		}
+		return "";
+	}
+	
 	public String transport(Route route) {
 		String transport = "";
 		double timeDouble = route.getStrategy().calculateTime(route.getDistance()) * 60;

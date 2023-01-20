@@ -10,6 +10,8 @@ import javax.faces.bean.ViewScoped;
 
 import businessLogic.IBusinessLogicController;
 import businessLogic.stay.Stay;
+import businessLogic.stay.StayActivity;
+import businessLogic.stay.StayActivityType;
 import businessLogic.stay.StayProfile;
 import spring.springContainer;
 
@@ -54,6 +56,16 @@ public class ResultOffersBean {
 	public String printComfort(Stay stay) {
 		double comfort = stay.calculateConfort() * 5;
 		return String.valueOf((int)comfort);
+	}
+	
+	public String printNbExcursions(Stay stay) {
+		int count = 0;
+		for(StayActivity activity : stay.getActivities()) {
+			if (activity.getType() == StayActivityType.Excursion) {
+				count++;
+			}
+		}
+		return String.valueOf(count);
 	}
 	
 	public String descStay(Stay stay) {

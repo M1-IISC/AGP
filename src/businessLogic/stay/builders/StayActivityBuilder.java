@@ -26,7 +26,7 @@ import businessLogic.transport.TransportStrategy;
 public class StayActivityBuilder implements IStayActivityBuilder {
 	
 	private static final int MAX_ACTIVITIES = 5;  
-	private static final double MAX_TIME = 5;  
+	private static final double MAX_TIME = 10;  
 	
 	private int searchId = 0;
 
@@ -58,13 +58,15 @@ public class StayActivityBuilder implements IStayActivityBuilder {
 			activity = new Excursion(periodOfDay, itinerary);
 			break;
 		case Move:
-			activity = new Move(periodOfDay, null);
+			Node node = findPointInGraph(arrivalPoint);
+			Route route = new Route(arrivalPoint, node.getEdges().get(1).getStrategy(), node.getEdges().get(1).getDistance());
+			activity = new Move(periodOfDay, route);
 			startingPoint = arrivalPoint;
 			break;
 		}
 		
 		// Remove the cost of activity to the client's budget
-		budget -= activity.calculateCost();
+		// budget -= activity.calculateCost();
 		
 		return activity;
 	}

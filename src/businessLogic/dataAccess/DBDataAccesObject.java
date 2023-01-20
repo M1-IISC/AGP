@@ -181,10 +181,8 @@ public class DBDataAccesObject implements DataAccesObject {
 						)
 					);
 		}
-		
-		if (keywords==null||keywords.isEmpty()) return placesTransportObjectList;
-		
-		querry = String.format("Select name from site with %s", keywords);
+				
+		querry = String.format("Select name from site with %s", keywords == null || keywords.isEmpty() ? "*:*" : keywords);
 		resultSet = persistanceLayerInterface.executeQuery(querry);
 		while (resultSet.next())
 		{

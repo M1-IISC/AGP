@@ -99,7 +99,11 @@ header {
         margin: .3rem;
         text-align: center;
         padding: 2rem 0;
-    }
+}
+
+.text-size {
+	font-size: 18px;
+}
 
 .product-item .product-image {
     width: 50%;
@@ -128,8 +132,9 @@ header {
                         <h4 class="mb-1">#{stay.getBeginPoint().name}</h4>
                         <h6 class="mt-0 mb-3">
                         	<p:rating  readonly="true" id="comfort" value="#{resultOffersBean.printComfort(stay)}"/>
-				            <h:outputText id="duration" value="#{formBean.stayDuration} jours - " />
-                            <h:outputText value="#{stay.calculateCost()} €"/>
+				            <h:outputText class="text-size" id="duration" value="#{formBean.stayDuration} jours - " />
+                            <h:outputText class="text-size" value="#{stay.calculateCost()} € - "/>
+                            <h:outputText class="text-size" id="nb" value="#{resultOffersBean.printNbExcursions(stay)} excursions"/>
                         </h6>
                         <div class="mt-5">
                             <p:commandButton id="selectStay" value="Voir ce séjour" action="#{resultOffersBean.descStay(stay)}" />
