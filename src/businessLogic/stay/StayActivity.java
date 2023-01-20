@@ -1,5 +1,7 @@
 package businessLogic.stay;
 
+import java.util.List;
+
 import businessLogic.journeyPoint.PeriodOfDay;
 
 public abstract class StayActivity {
@@ -13,6 +15,8 @@ public abstract class StayActivity {
 	public abstract double calculateConfort();
 	
 	public abstract double calculateCost();
+	
+	public abstract List<Route> getRoutes();
 	
 	public abstract StayActivityType getType();
 

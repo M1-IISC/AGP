@@ -1,5 +1,8 @@
 package businessLogic.stay;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import businessLogic.journeyPoint.Hotel;
 import businessLogic.journeyPoint.PeriodOfDay;
 
@@ -29,6 +32,11 @@ public class ChillTime extends StayActivity {
 	@Override
 	public StayActivityType getType() {
 		return StayActivityType.ChillTime;
+	}
+
+	@Override
+	public List<Route> getRoutes() {
+		return new ArrayList<Route>();
 	}
 
 }
