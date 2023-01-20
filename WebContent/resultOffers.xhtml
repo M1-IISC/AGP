@@ -21,7 +21,7 @@ h2 {
 }
 
 h3{
-	font-size: 50px;
+	font-size: 20px;
 	margin: 0.4em;
 }
 
@@ -113,19 +113,16 @@ header {
 <h:body>
 	<header>
 		<h2>🌴 Les Seychelles c'est chez vous !</h2>
-		<p:commandButton id="btn-find-trip" value="Plan your dream trip now" icon="pi pi-calendar" styleClass="rounded-button" action="#{indexBean.startCreateYourDreamTrip}" />
 	</header>
 	<div id="banner-parent"></div>
- 	<center><strong><h3>Choissez votre séjour ! </h3></strong></center>
-	
+	<h:form> 
 	<p:carousel value="#{resultOffersBean.stays}" var="stay" numVisible="3" numScroll="3">
             <f:facet name="header">
                 <h3>Choissez votre séjour !</h3>
             </f:facet>
             <div class="product-item">
                 <div class="product-item-content">
-                	<div class="mb-3">
-                        
+                	<div class="mb-3">  
                     </div>
                     <div>
                         <h4 class="mb-1">#{stay.getBeginPoint().name}</h4>
@@ -135,39 +132,12 @@ header {
                             <h:outputText value="#{stay.calculateCost()} €"/>
                         </h6>
                         <div class="mt-5">
-                            <p:commandButton id="selectStay" value="Voir" action="#{resultOffersBean.descStay(stay)}" />
+                            <p:commandButton id="selectStay" value="Voir ce séjour" action="#{resultOffersBean.descStay(stay)}" />
                         </div>
                     </div>
                 </div>
             </div>
     </p:carousel>
-	
-	<div id="stayOffers">
-	    <h:form>
-		    <ui:repeat var="stay" value="#{resultOffersBean.stays}">
-				        <p:panel id="pnl" header="Séjour">
-				            <div id="dataStay" >
-				            	<div id="data">
-				                <h:outputLabel for="hotel" value="Hôtel : "/>
-				                	<h:outputText id="hotel" value="#{stay.getBeginPoint().name}" />
-				                </div>
-				                <div id="data">
-								<h:outputLabel for="price" value="Prix : "/>
-				                	<h:outputText id="price" value="#{stay.calculateCost()}" />
-				                </div>
-				                <div id="data">
-				                <h:outputLabel for="duration" value="Durée en jour : "/>
-				                	<h:outputText id="duration" value="#{formBean.stayDuration}" />
-				        		</div>
-				                <div id="data">
-				
-				                	<p:rating  readonly="true" id="comfort" value="#{resultOffersBean.printComfort(stay)}"/>
-				               </div>
-				         </div>
-				            <p:commandButton id="selectStay" value="Voir" action="#{resultOffersBean.descStay}" />
-				        </p:panel>
-		        </ui:repeat>
-	        </h:form>
-       </div>
+    </h:form> 
 </h:body>
 </html>

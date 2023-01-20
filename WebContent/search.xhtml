@@ -83,11 +83,12 @@
 		<h2>🌴 Les Seychelles c'est chez vous !</h2>
 	</header>
 	<center>
-	<h:form>  
-		<p:commandButton icon="pi pi-arrow-left" action="#{searchBean.back}"/>
-		<p:inputText class="search-bar" id="search-bar" value="#{indexBean.query}"  placeholder="Effectuez une recherche par mots-clés"/>
-		<p:commandButton value="Rechercher" action="#{indexBean.startSearch}"/>
-	</h:form>  
+		<h:form> 
+			<p:defaultCommand target="primary-button" /> 
+			<p:commandButton icon="pi pi-arrow-left" action="#{searchBean.back}"/>
+			<p:inputText class="search-bar" id="search-bar" value="#{indexBean.query}"  placeholder="Effectuez une recherche par mots-clés"/>
+			<p:commandButton id="primary-button" value="Rechercher" action="#{indexBean.startSearch}"/>
+		</h:form> 
 	</center>
 	<div id="results">
 		<h3>#{searchBean.resultsLenght()} résultats de recherche pour "#{indexBean.query}"</h3>

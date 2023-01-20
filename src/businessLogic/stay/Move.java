@@ -1,5 +1,8 @@
 package businessLogic.stay;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import businessLogic.journeyPoint.PeriodOfDay;
 
 public class Move extends StayActivity {
@@ -27,6 +30,13 @@ public class Move extends StayActivity {
 	@Override
 	public StayActivityType getType() {
 		return StayActivityType.Move;
+	}
+
+	@Override
+	public List<Route> getRoutes() {
+		List<Route> routes = new ArrayList<Route>();
+		routes.add(route);
+		return routes;
 	}
 
 }

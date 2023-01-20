@@ -30,15 +30,15 @@ public class IndexBean {
 	
 	
 	public String startHotels() {
-		return "hotels";
+		return "hotels?faces-redirect=true";
 	}
 	
 	public String startCreateYourDreamTrip() {
-		return "form";
+		return "form?faces-redirect=true";
 	}
 	
 	public String startHistoricalSites() {
-		return "toursticsites";
+		return "toursticsites?faces-redirect=true";
 	}
 	
 	public String startSearch() {

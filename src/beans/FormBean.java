@@ -31,6 +31,10 @@ public class FormBean {
 
     public FormBean() {
     }
+    
+    public String back() {
+		return "index?faces-redirect=true";
+	}
 
     public IBusinessLogicController getIblc() {
 		return iblc;
